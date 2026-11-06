@@ -1,0 +1,42 @@
+# Linux cgroup v2 and the enforcing otog-grader AppArmor profile are required.
+services:
+  grader:
+    build:
+      context: .
+      dockerfile: Dockerfile.glibc
+    image: otog-grader:hardened
+    privileged: false
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [SYS_ADMIN, NET_ADMIN, SYS_CHROOT, SETUID, SETGID, CHOWN, DAC_OVERRIDE, FOWNER, KILL]
+    security_opt: ["no-new-privileges:true", "apparmor=otog-grader"]
+    mem_limit: 1536m
+    memswap_limit: 1536m
+    pids_limit: 128
+    cpuset: "0"
+    restart: unless-stopped
+    stop_grace_period: 10m
+    environment:
+      OTOG_WORKER_ID: "1"
+      OTOG_MLE_CGROUP: "1"
+      OTOG_RESTRICTED_CONTAINER: "1"
+      USE_ISOLATE: "true"
+      USE_CONTROL_GROUP: "false"
+      DISCORD_SEND_MESSAGE_WHEN_ERROR: "false"
+      GRADER_ENABLE_OFFLINE_LOGGING: "false"
+    env_file: [.env]
+    volumes:
+      - ../apps/api/source:/usr/src/app/shared-source:ro
+    tmpfs:
+      - /var/local/lib/isolate:rw,exec,nosuid,size=256m,nr_inodes=4096
+      - /run/isolate:rw,nosuid,nodev,noexec,size=1m,nr_inodes=128,mode=0755
+      - /usr/src/app/env:rw,nosuid,nodev,noexec,size=144m,nr_inodes=256,mode=0750
+      - /usr/src/app/source:rw,nosuid,nodev,noexec,size=128m,nr_inodes=16384,mode=0755
+      - /opt/otog-worker-bin:rw,exec,nosuid,nodev,size=1m,nr_inodes=32,mode=0755
+      - /usr/src/app/Logging:rw,nosuid,nodev,noexec,size=2m
+      - /tmp:rw,nosuid,nodev,noexec,size=144m,nr_inodes=2048,mode=1777
+    networks: [otog-network]
+networks:
+  otog-network:
+    name: otog-network
+    external: true

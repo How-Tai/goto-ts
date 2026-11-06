@@ -1,0 +1,123 @@
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
+import { useEffect, useRef, useState } from 'react'
+
+import Head from 'next/head'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+
+import { RegisterBody } from '@otog/contract'
+import { Button } from '@otog/ui/button'
+import { Form, FormField, FormItem, FormLabel } from '@otog/ui/form'
+import { Input } from '@otog/ui/input'
+
+import Logo from '../../public/logo512.png'
+import { authQuery } from '../api/query'
+import { registrationErrorMessage, registrationMessages } from '../api/registration-feedback'
+
+export { getServerSideProps } from '../api/server'
+
+export default function RegisterPage() {
+  const form = useForm<RegisterBody>()
+  const router = useRouter()
+  const pending = useRef(false)
+  const slowTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [isRegistering, setRegistering] = useState(false)
+  useEffect(() => () => {
+    if (slowTimer.current !== null) clearTimeout(slowTimer.current)
+  }, [])
+
+  const register = authQuery.register.useMutation()
+  const onSubmit = form.handleSubmit(async (values) => {
+    if (pending.current) return
+    pending.current = true
+    setRegistering(true)
+    const toastId = toast.loading(registrationMessages.pending)
+    slowTimer.current = setTimeout(() => {
+      toast.loading(registrationMessages.slow, { id: toastId })
+    }, 3000)
+    try {
+      await register.mutateAsync({ body: values })
+      toast.success('ลงทะเบียนสำเร็จ!', { id: toastId })
+      router.push('/login')
+    } catch (error: unknown) {
+      toast.error(registrationErrorMessage(error), { id: toastId })
+    } finally {
+      if (slowTimer.current !== null) clearTimeout(slowTimer.current)
+      slowTimer.current = null
+      pending.current = false
+      setRegistering(false)
+    }
+  })
+  return (
+    <main className="container flex-1">
+      <Head>
+        <title>Register | OTOG</title>
+      </Head>
+      <Form {...form}>
+        <form
+          id="content"
+          onSubmit={onSubmit}
+          aria-busy={isRegistering}
+          className="mx-auto my-8 max-w-[300px] rounded-2xl border border-border p-5 shadow-md"
+        >
+          <div className="flex flex-col gap-4">
+            <Image
+              src={Logo}
+              className="mx-auto w-[100px] my-4"
+              alt="otog logo"
+            />
+            <FormField
+              control={form.control}
+              name="username"
+              defaultValue=""
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ชื่อผู้ใช้</FormLabel>
+                  <Input
+                    {...field}
+                    disabled={isRegistering}
+                    placeholder="ชื่อผู้ใช้"
+                    required
+                    autoFocus
+                  />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              defaultValue=""
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>รหัสผ่าน</FormLabel>
+                  <Input
+                    {...field}
+                    disabled={isRegistering}
+                    placeholder="รหัสผ่าน"
+                    required
+                    type="password"
+                  />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="showName"
+              defaultValue=""
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ชื่อที่ใช้แสดง</FormLabel>
+                  <Input {...field} disabled={isRegistering} placeholder="ชื่อที่ใช้แสดง" required />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="mt-5" disabled={isRegistering}>
+              {isRegistering ? registrationMessages.pending : 'ลงทะเบียน'}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </main>
+  )
+}

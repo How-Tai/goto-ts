@@ -1,0 +1,19 @@
+[Unit]
+Description=OTOG initial kernel housekeeping CPU affinity
+After=systemd-tmpfiles-setup.service
+Before=docker.service otog-grader-allocation.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/local/lib/otog/kernel-affinity.py --boot
+RemainAfterExit=yes
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ReadWritePaths=/proc/irq /sys/devices/virtual/workqueue/cpumask
+RestrictAddressFamilies=AF_UNIX
+
+[Install]
+WantedBy=multi-user.target

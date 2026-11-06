@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {pathToFileURL} from 'node:url';
+const require=createRequire('/home/otog/otog/apps/api/package.json');
+createRequire(require.resolve('@nestjs/common'))('reflect-metadata');
+const {WorkerControlService}=await import(pathToFileURL(process.argv[2]).href);
+const name=process.argv[3];
+assert(/^otog-worker-kill-test-\d+$/.test(name),'Test must never target production worker names');
+const service=new WorkerControlService(null,{invalidate(){}});
+const before=JSON.parse(await service.dockerRequest('GET',`/v1.44/containers/${name}/json`,3000));
+assert(before.Config.Env.some(value=>/^POSTGRES_DATABASE=otog_worker_test_kill_/.test(value)));
+await service.dockerRequest('POST',`/v1.44/containers/${before.Id}/restart?t=0&signal=SIGKILL`,10000);
+const after=JSON.parse(await service.dockerRequest('GET',`/v1.44/containers/${name}/json`,3000));
+assert(after.State.Running);assert.notEqual(after.State.StartedAt,before.State.StartedAt);
+console.log('Real Docker HTTP transport killed and restarted only the disposable grading container.');

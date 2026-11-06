@@ -1,0 +1,40 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {pathToFileURL} from 'node:url';
+const {GradingService,resourceFreshness}=await import(pathToFileURL(process.argv[2]).href);
+const require=createRequire('/home/otog/otog/apps/web/package.json');
+const React=require('react');const {renderToStaticMarkup}=require('react-dom/server');
+const {ResourceReadingsContent,resourceExpiryDelay}=await import(pathToFileURL(process.argv[3]).href);
+const now=Date.parse('2026-10-11T12:00:00Z');
+const sample=age=>({observedAt:new Date(now-age).toISOString(),services:[{cpuPercent:77.7}]});
+assert.equal(resourceFreshness(sample(0),now).state,'fresh');
+assert.equal(resourceFreshness(sample(19999),now).state,'fresh');
+assert.equal(resourceFreshness(sample(20000),now).state,'stale');
+for(const value of [null,{}, {observedAt:'invalid'},sample(-5000)])assert.equal(resourceFreshness(value,now).state,'unavailable');
+let reads=0;
+const service=new GradingService({$queryRaw:async()=>{reads++;return [{data:{waiting:7,workers:[{id:1}]}}]}});
+const clock=Date.now;let frozen=now;
+Date.now=()=>frozen;
+service.readTelemetry=async()=>sample(19900);
+try {
+  const first=await service.status();assert(first.telemetry);assert.equal(first.resourceStatus.state,'fresh');
+  frozen+=200;
+  const cached=await service.status();assert.equal(reads,1,'Freshness should expire even within the API cache');
+  assert.equal(cached.telemetry,null);assert.equal(cached.resourceStatus.state,'stale');assert.equal(cached.waiting,7);assert.equal(cached.workers.length,1);
+  service.invalidate();service.readTelemetry=async()=>null;
+  const unavailable=await service.status();assert.equal(unavailable.resourceStatus.state,'unavailable');assert.equal(unavailable.waiting,7);
+  service.invalidate();service.readTelemetry=async()=>({observedAt:new Date(frozen).toISOString()});
+  assert.equal((await service.status()).resourceStatus.state,'fresh','Fresh readings should recover normally');
+}finally{Date.now=clock;}
+const fresh={state:'fresh',sampledAt:new Date(now).toISOString(),ageMs:4000};
+const render=(freshness,elapsedMs,requestDurationMs=500)=>renderToStaticMarkup(React.createElement(ResourceReadingsContent,
+ {freshness,elapsedMs,requestDurationMs},React.createElement('div',null,'CPU 77.7% RAM 1234 MB')));
+assert.equal(resourceExpiryDelay(fresh,0,500),15500);
+assert(render(fresh,15499).includes('CPU 77.7%'));
+const expired=render(fresh,15500);assert(!expired.includes('77.7'));assert(!expired.includes('1234'));assert(expired.includes('Resource readings expired'));assert(expired.includes('Queue and worker controls remain available'));
+assert(!render(fresh,60000).includes('77.7'),'Returning to a suspended tab must hide expired numbers');
+assert(!render({...fresh,state:'stale'},0).includes('77.7'));
+assert(render({state:'unavailable',sampledAt:null,ageMs:null},0).includes('monitoring is unavailable'));
+assert(!render(fresh,0,20000).includes('77.7'),'A slow response must not make an old snapshot look new');
+assert(render({...fresh,ageMs:100},0).includes('CPU 77.7%'),'Fresh data restores readings');
+console.log('Server/cache expiry, malformed/future samples, network-delay accounting, stalled polling, suspended-tab expiry, hidden stale CPU/RAM, independent queue/workers and recovery passed.');

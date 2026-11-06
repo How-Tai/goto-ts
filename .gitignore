@@ -1,0 +1,60 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Testing
+coverage
+
+# Turbo
+.turbo
+
+# Vercel
+.vercel
+
+# Build Outputs
+.next/
+out/
+build
+dist
+
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+.DS_Store
+*.pem
+
+volumes/
+
+# Local runtime files and private operational data
+/tmp/
+**/__pycache__/
+*.py[cod]
+**/.env.local
+**/.env.*.local
+/tools/bottle-match/
+/tools/problem-74/
+/tools/testcases-67-72/
+/grader/vm-setup/
+/grader/docker-compose.workers.yml
+*.docx
+
+# Keep local credentials and inherited VPN deployment configuration private.
+**/.env.dev
+*.ovpn
+*.key
+*.p12
+*.pfx

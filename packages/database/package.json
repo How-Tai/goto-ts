@@ -1,0 +1,34 @@
+{
+  "name": "@otog/database",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "types": "./src/index.ts",
+  "browser": "./dist/index-browser.cjs",
+  "scripts": {
+    "codegen": "prisma generate && pnpm build-zod && pnpm build-entrypoint && pnpm build-browser",
+    "build-zod": "tsup ./__generated__/zod/*.ts --outDir ./__generated__/zod",
+    "build-entrypoint": "tsup ./src/index.ts --outDir dist",
+    "build-browser": "tsup ./src/index-browser.ts --platform browser --outDir dist",
+    "migrate": "prisma migrate dev",
+    "migrate:create-only": "prisma migrate dev --create-only",
+    "reset": "prisma migrate reset --force && prisma generate",
+    "reset:no-seed": "prisma migrate reset --force --skip-seed && prisma generate",
+    "seed": "prisma db seed",
+    "push": "prisma migrate deploy"
+  },
+  "dependencies": {
+    "pg": "^8.23.1",
+    "prisma": "6.19.3",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@prisma/client": "6.19.3",
+    "@types/pg": "^8.23.1",
+    "tsup": "^8.5.1",
+    "tsx": "^4.23.15",
+    "zod-prisma": "^0.5.4"
+  },
+  "prisma": {
+    "seed": "tsx ./src/seed.ts"
+  }
+}

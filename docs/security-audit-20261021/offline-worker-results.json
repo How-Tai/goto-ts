@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-21",
+  "passed": true,
+  "mode": "offline control-flow and bounded checker fixtures",
+  "results": [
+    {
+      "check": "finished-job retained-files admission stall",
+      "realMainLoop": true,
+      "realLowMemoryClaimBranch": true,
+      "simulatedAvailableMiB": 1400,
+      "requiredAvailableMiB": 1536,
+      "actualFixtureBytes": 65536,
+      "fileRetainedAfterIdle": true,
+      "newClaimAttemptsWithoutCleanup": 3,
+      "sandboxExecuted": false,
+      "claims": 4,
+      "emptyWaits": 3,
+      "judged": 1,
+      "persisted": 1
+    },
+    {
+      "check": "admission has no reservation accounting",
+      "simulatedAvailableMiB": 1800,
+      "concurrentAdmissionChecksAllowed": 6,
+      "actualLargeAllocations": 0
+    },
+    {
+      "check": "standard checker bounded long lines/Unicode/invalid UTF-8",
+      "casesPassed": 37
+    },
+    {
+      "check": "source matches retained 17 October deployment manifest",
+      "files": {
+        "grader_safety.py": "exact",
+        "mainWorkers.py": "exact",
+        "worker_queue.py": "exact",
+        "handle.py": "exact",
+        "sandbox_security.py": "exact",
+        "evaluate/classic.py": "matches after CRLF normalization",
+        "evaluate/codeforces.py": "matches after CRLF normalization",
+        "evaluate/verdict/main.py": "exact",
+        "evaluate/verdict/standard.py": "exact",
+        "evaluate/verdict/cppCheck.py": "exact",
+        "evaluate/verdict/thaco.py": "exact",
+        "evaluate/verdict/ogogi.py": "exact"
+      },
+      "freshLiveVerification": false
+    },
+    {
+      "check": "worker-loop cleanup and idle watchdog source inspection",
+      "successOrIdleCleanupCalls": [],
+      "claimPrecedesJobWatchdog": true
+    }
+  ],
+  "productionRequests": 0,
+  "productionWrites": 0,
+  "hostileProgramsExecuted": 0
+}

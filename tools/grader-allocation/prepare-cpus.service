@@ -1,0 +1,20 @@
+[Unit]
+Description=Repair OTOG container CPU assignments for this VM boot
+Requires=docker.service
+After=docker.service
+Before=otog-grader-allocation.service otog-api.service
+PartOf=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/local/lib/otog/prepare-cpus.py
+RemainAfterExit=yes
+TimeoutStartSec=180
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+RestrictAddressFamilies=AF_UNIX
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-21",
+  "mode": "offline source execution; dummy DB; no listener",
+  "passed": true,
+  "results": [
+    {
+      "check": "rate-limit route alias bypass",
+      "endpoint": "login",
+      "variant": "/AUTH/LOGIN",
+      "requests": 125,
+      "blocked": 0,
+      "expressRoutesToProtectedHandler": true
+    },
+    {
+      "check": "rate-limit route alias bypass",
+      "endpoint": "login",
+      "variant": "/auth/login/",
+      "requests": 125,
+      "blocked": 0,
+      "expressRoutesToProtectedHandler": true
+    },
+    {
+      "check": "rate-limit route alias bypass",
+      "endpoint": "register",
+      "variant": "/AUTH/REGISTER",
+      "requests": 125,
+      "blocked": 0,
+      "expressRoutesToProtectedHandler": true
+    },
+    {
+      "check": "rate-limit route alias bypass",
+      "endpoint": "register",
+      "variant": "/auth/register/",
+      "requests": 125,
+      "blocked": 0,
+      "expressRoutesToProtectedHandler": true
+    },
+    {
+      "check": "username throttle precedes JSON body parser",
+      "guardIndex": 2,
+      "parserIndex": 3,
+      "usernameUnavailableAtThrottle": true
+    },
+    {
+      "check": "prizes bypass AFTER_CONTEST scoreboard restriction",
+      "scoreboardStatus": 403,
+      "prizeStatus": 200,
+      "disclosed": [
+        "submission ID",
+        "problem ID",
+        "contestant ID",
+        "show name",
+        "accepted/unique-solver information"
+      ]
+    },
+    {
+      "check": "public-problem submission list omits contest visibility",
+      "status": 200,
+      "where": {
+        "userId": 2,
+        "problemId": 9,
+        "id": {
+          "lt": 1000
+        }
+      },
+      "returnedContestId": 7,
+      "sourceCodeSelected": false
+    },
+    {
+      "check": "installed dependency drift",
+      "nextRequested": "15.5.28",
+      "nextInstalled": "14.2.3",
+      "multerRequested": "2.4.0",
+      "multerInstalled": "1.4.4-lts.1",
+      "expressInstalled": "4.19.2",
+      "reactInstalled": "18.3.1",
+      "node": "v24.15.0"
+    }
+  ],
+  "hashes": {
+    "apps/api/src/utils/security-middleware.ts": "9565043395248de57bdf0d71a877c01efc0664fea626d0b4e3fb45029cfc2f15",
+    "apps/api/src/index.ts": "3c065205b7343dce5daa124f689434c52f8b2cbbb26851648d924f3ecddb5b89",
+    "apps/api/src/modules/contest/contest.controller.ts": "7020064d8bb997169ceaa1eabf4061977916189334f8653b233a209953bfe93f",
+    "apps/api/src/modules/contest/contest.service.ts": "5b801572dce0470af436d507c0e65d3c5124e43724ea094e63d4dc8bd0d7fcf1",
+    "apps/api/src/modules/submission/submission.controller.ts": "3da1d43d124a5abd2fd7daf007fc57f445d0e1880675373beca8dca1275949ad",
+    "apps/api/src/modules/submission/submission.service.ts": "4299a2eb94dd2b2b9951aafe8faad0ac4a4efaddc55d77c6a18e26d3fd99260f"
+  },
+  "productionRequests": 0,
+  "productionWrites": 0
+}

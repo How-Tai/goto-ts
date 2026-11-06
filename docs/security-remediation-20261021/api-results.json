@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "check": "shared throttle for canonical/case/trailing-slash routes",
+      "endpoint": "login"
+    },
+    {
+      "check": "shared throttle for canonical/case/trailing-slash routes",
+      "endpoint": "register"
+    },
+    {
+      "check": "username throttle spans peer IPs without blocking another account"
+    },
+    {
+      "check": "bounded JSON and form parsers precede account throttling",
+      "json": 2,
+      "form": 3,
+      "guard": 4
+    },
+    {
+      "check": "scoreboard, prizes and history share policy/time/hidden/admin authorization",
+      "fixtures": 162
+    },
+    {
+      "check": "submission list and detail visibility match for guest/user/admin; controller supplies viewer"
+    },
+    {
+      "check": "chat and announcements allow safe links and reject script/data schemes"
+    },
+    {
+      "check": "actual local dependency resolution",
+      "next": "15.5.28",
+      "multer": "2.4.0"
+    }
+  ],
+  "productionWrites": 0
+}

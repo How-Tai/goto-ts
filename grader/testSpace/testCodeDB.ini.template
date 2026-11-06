@@ -1,0 +1,13 @@
+# you can add the other problems here
+[1000]
+# #testcase  (required)
+TestCase = 10
+# memory in mb
+Memory = 256
+# time in seconds
+Time = 1
+
+[13]
+TestCase = 14
+Time = 2
+...

@@ -1,0 +1,11 @@
+{
+  "name": "@otog/postcss",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./color-to-hsl.cjs",
+  "devDependencies": {
+    "@csstools/css-color-parser": "^1.6.3",
+    "@csstools/css-parser-algorithms": "^2.7.1",
+    "@csstools/css-tokenizer": "^2.4.1"
+  }
+}

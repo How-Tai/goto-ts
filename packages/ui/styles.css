@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: colorToHsl(theme(colors.white));
+    --foreground: colorToHsl(theme(colors.gray.950));
+    --card: colorToHsl(theme(colors.white));
+    --card-foreground: colorToHsl(theme(colors.gray.950));
+    --popover: colorToHsl(theme(colors.white));
+    --popover-foreground: colorToHsl(theme(colors.gray.950));
+    --primary: colorToHsl(theme(colors.orange.400));
+    --primary-foreground: colorToHsl(theme(colors.gray.50));
+    --secondary: colorToHsl(theme(colors.gray.100));
+    --secondary-foreground: colorToHsl(theme(colors.gray.900));
+    --muted: colorToHsl(theme(colors.gray.100));
+    --muted-foreground: colorToHsl(theme(colors.gray.500));
+    --accent: colorToHsl(theme(colors.gray.100));
+    --accent-foreground: colorToHsl(theme(colors.gray.900));
+    --destructive: colorToHsl(theme(colors.red.500));
+    --destructive-foreground: colorToHsl(theme(colors.gray.50));
+    --border: colorToHsl(theme(colors.gray.200));
+    --input: colorToHsl(theme(colors.gray.200));
+    --ring: colorToHsl(theme(colors.orange.400));
+    --success: colorToHsl(theme(colors.green.500));
+    --success-foreground: colorToHsl(theme(colors.gray.50));
+
+    --accept: colorToHsl(theme(colors.green.100));
+    --accept-foreground: colorToHsl(theme(colors.green.950));
+    --reject: colorToHsl(theme(colors.red.100));
+    --reject-foreground: colorToHsl(theme(colors.red.950));
+    --warning: colorToHsl(theme(colors.amber.100));
+    --warning-foreground: colorToHsl(theme(colors.amber.950));
+    --info: colorToHsl(theme(colors.sky.100));
+    --info-foreground: colorToHsl(theme(colors.sky.950));
+    --error: colorToHsl(theme(colors.purple.100));
+    --error-foreground: colorToHsl(theme(colors.purple.950));
+
+    --sidebar-background: colorToHsl(theme(colors.white));
+    --sidebar-foreground: colorToHsl(theme(colors.gray.950));
+    --sidebar-primary: colorToHsl(theme(colors.orange.400));
+    --sidebar-primary-foreground: colorToHsl(theme(colors.gray.50));
+    --sidebar-accent: colorToHsl(theme(colors.gray.100));
+    --sidebar-accent-foreground: colorToHsl(theme(colors.gray.900));
+    --sidebar-border: colorToHsl(theme(colors.gray.200));
+    --sidebar-ring: colorToHsl(theme(colors.orange.400));
+
+    --radius: 0.75rem;
+    --navbar: 64px;
+
+
+    --chart-1: 173 58% 39%;
+    --chart-2: 12 76% 61%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --background: colorToHsl(theme(colors.gray.900));
+    --foreground: colorToHsl(theme(colors.gray.50));
+    --card: colorToHsl(theme(colors.gray.900));
+    --card-foreground: colorToHsl(theme(colors.gray.50));
+    --popover: colorToHsl(theme(colors.gray.900));
+    --popover-foreground: colorToHsl(theme(colors.gray.50));
+    --primary: colorToHsl(theme(colors.orange.500));
+    --primary-foreground: colorToHsl(theme(colors.gray.50));
+    --secondary: colorToHsl(theme(colors.gray.700));
+    --secondary-foreground: colorToHsl(theme(colors.gray.50));
+    --muted: colorToHsl(theme(colors.gray.700));
+    --muted-foreground: colorToHsl(theme(colors.gray.400));
+    --accent: colorToHsl(theme(colors.gray.700));
+    --accent-foreground: colorToHsl(theme(colors.gray.50));
+    --destructive: colorToHsl(theme(colors.red.600));
+    --destructive-foreground: colorToHsl(theme(colors.gray.50));
+    --border: colorToHsl(theme(colors.gray.700));
+    --input: colorToHsl(theme(colors.gray.700));
+    --ring: colorToHsl(theme(colors.orange.500));
+    --success: colorToHsl(theme(colors.green.600));
+    --success-foreground: colorToHsl(theme(colors.gray.50));
+
+    --accept: colorToHsl(theme(colors.green.500));
+    --accept-foreground: colorToHsl(theme(colors.green.500));
+    --reject: colorToHsl(theme(colors.red.500));
+    --reject-foreground: colorToHsl(theme(colors.red.500));
+    --warning: colorToHsl(theme(colors.amber.500));
+    --warning-foreground: colorToHsl(theme(colors.amber.500));
+    --info: colorToHsl(theme(colors.sky.500));
+    --info-foreground: colorToHsl(theme(colors.sky.500));
+    --error: colorToHsl(theme(colors.purple.500));
+    --error-foreground: colorToHsl(theme(colors.purple.500));
+
+
+    --sidebar-background: colorToHsl(theme(colors.gray.900));
+    --sidebar-foreground: colorToHsl(theme(colors.gray.50));
+    --sidebar-primary: colorToHsl(theme(colors.orange.500));
+    --sidebar-primary-foreground: colorToHsl(theme(colors.gray.50));
+    --sidebar-accent: colorToHsl(theme(colors.gray.700));
+    --sidebar-accent-foreground: colorToHsl(theme(colors.gray.50));
+    --sidebar-border: colorToHsl(theme(colors.gray.700));
+    --sidebar-ring: colorToHsl(theme(colors.orange.500));
+
+    
+    --chart-1: 160 60% 45%;
+    --chart-2: 220 70% 50%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply font-sans bg-background text-foreground antialiased overflow-y-scroll;
+  }
+}
+
+[type='search']::-webkit-search-decoration,
+[type='search']::-webkit-search-cancel-button {
+  appearance: none;
+}

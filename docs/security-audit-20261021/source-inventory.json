@@ -1,0 +1,805 @@
+{
+  "scope": "security triage inventory; hashes do not imply every line was exhaustively verified",
+  "files": {
+    "api": [
+      {
+        "path": "D:\\otog\\apps\\api\\src\\app.controller.ts",
+        "sha256": "fdb6ed7223c1ddd61681cbbdae22ef65b078e941567f3de16822153707c6c436"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\app.module.ts",
+        "sha256": "8c0a5942d874c6b3a92122a462ed353bf60ce8e004445ba49381a68d7add9331"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\app.service.ts",
+        "sha256": "023316496c5a15e0cdd749f69ce09c56e60cff6c60fdd1ddcf760fdc025535ec"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\constants\\index.ts",
+        "sha256": "9bf593352d762313c5f4bca7c07a3152770024d93397a365b09b7b31034fba94"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\database\\database.module.ts",
+        "sha256": "b8247537de0976fed3bc070f74e2cfb7ad04af5835fcf62b86795085288174b1"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\database\\prisma.module.ts",
+        "sha256": "2762b5e940ab9c99ccb02e2cd80d7d108c6840bb00c7e858c08a1457cd5a3b7c"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\database\\prisma.service.ts",
+        "sha256": "8371df228c166ca4f66488e74e6ee63b65fc47d1a89c262f22dc5b99c1ec5b7f"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\decorators\\isPublic.decorator.ts",
+        "sha256": "6b4680fda17bb15fa247b378ba5e78da662a05667d9815233be3991f83d472f7"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\decorators\\offline-mode.decorator.ts",
+        "sha256": "25a9ac9e39ffa90b4487cc6259642a0fe44cd759c9edd2a8f7d400c6bf1de4c5"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\decorators\\roles.decorator.ts",
+        "sha256": "2b637ed0aa700e2363b05db3995c70995d43703b816b713eedacc8024bdd2df6"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\decorators\\user.decorator.ts",
+        "sha256": "5b348e65b9c8e0b0d70e8eabb1bc8d540a0420700ab89949e97693fb276d8882"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\fileManager\\index.ts",
+        "sha256": "4f4a4a447c920fcaeeaa880b008c4940d089eb5fe10bc2fbac1047c89844cdac"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\guards\\jwt-auth.guard.ts",
+        "sha256": "e50cc5a7f4c743de722b6deb5a43385a43f1e9010cf698b3f2c7c1ace8c96a3b"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\guards\\jwt-refreshtoken-auth.guard.ts",
+        "sha256": "ac42cf51aa918b00cbbea58ee28b450eb62f988190ea87bd994fad7097ad766d"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\guards\\local-auth.guard.ts",
+        "sha256": "8b73baba6a52f32684d61d5d6be1257114c391b8b40b2ace26441af4245700e7"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\guards\\offline-mode.guard.ts",
+        "sha256": "70d7db5a6b43afbfada5d640605e3eeb8fac59af43eb3538930ed73515835201"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\core\\guards\\roles.guard.ts",
+        "sha256": "44c1352e0659ae9f3c459bb469242168ab00078200a104bd01556b4f819f08be"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\env.ts",
+        "sha256": "c01dee7c645b93c138a1382ffe6af8a39bc310c25ec9547c757f098efba90369"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\index.ts",
+        "sha256": "3c065205b7343dce5daa124f689434c52f8b2cbbb26851648d924f3ecddb5b89"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\announcement\\announcement.controller.ts",
+        "sha256": "7065a14bfac0e8f4fb1c39bd3fac493487c8a7e735097063ea084e223759ba5d"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\announcement\\announcement.module.ts",
+        "sha256": "8a8f6946e760f78be84f1d8b3effc90312761d6fa48348172eb4568fb9fd2aab"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\announcement\\announcement.service.ts",
+        "sha256": "2729896172a8f71f3024be745dac2f3ed7e746f22790942811efa1ee78deec17"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\auth\\auth.controller.ts",
+        "sha256": "56f02bad36aba8bbe1cb2320186b49e204069a8c707277afe2021875dca5a515"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\auth\\auth.module.ts",
+        "sha256": "6468b7263a9bebac4446a3864d2e252356019105dc4ed9f315649356ac2a337a"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\auth\\auth.service.ts",
+        "sha256": "a3cd27a51260cc467ae75e759543f4be809c6a03cdb5dc40ae6f3a5e2cea536d"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\auth\\dto\\auth.dto.ts",
+        "sha256": "414147957ad5b203c842be02593395b639dcb2462bbd7337e41589be476d9959"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\auth\\jwt.refreshtoken.strategy.ts",
+        "sha256": "e7c72904f053b1ef65342505099f4c44034e326ca3ac11c606e1e35eea859585"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\auth\\jwt.strategy.ts",
+        "sha256": "f196e47db166c52c43309cfa2a5ebf4d8cd3fcae756b5168403e18dcbbd7ca35"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\auth\\local.strategy.ts",
+        "sha256": "098166aedaf22c1f8ecf77fadc41b01ab850c67738ad98e1d8eb604c15925c52"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\chat\\chat.controller.ts",
+        "sha256": "fba58a4e67ab8622c5c3d1a4de163e7dd9dc58312a46116737775c268c294f7d"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\chat\\chat.gateway.ts",
+        "sha256": "37ea9d83b51d2cc23b033099910b5e3b31267b9ec19d888bd2558ea65ebef8a7"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\chat\\chat.module.ts",
+        "sha256": "6ad26c1438897d18544ff7b184d1036162a9c5b3c7a10e4c80839ae3d3a292c1"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\chat\\chat.service.ts",
+        "sha256": "0e1a47b53522f6e463a2ed49150489363bb67c78d13953573c33566122edfbaf"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\contest\\contest.controller.ts",
+        "sha256": "7020064d8bb997169ceaa1eabf4061977916189334f8653b233a209953bfe93f"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\contest\\contest.module.ts",
+        "sha256": "a4d220d6202db7e6e365289c1235c3e85b08443bd651bcb457b37b984a7d09f0"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\contest\\contest.service.ts",
+        "sha256": "5b801572dce0470af436d507c0e65d3c5124e43724ea094e63d4dc8bd0d7fcf1"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\grading\\grading.controller.ts",
+        "sha256": "a9e5c7a4018f560502f8cb88b7c9ae8430a6add83ee4f5b16c8a5cc4c30bafaa"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\grading\\grading.module.ts",
+        "sha256": "a284437923c71cab970aa863aa25a2e38a8c8f30aeded52aadafa601ffc935df"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\grading\\grading.service.ts",
+        "sha256": "ea2898cdad9038323d42b3c9bbb1d06f22109a36a4d684e9fb6f1cab372388d4"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\grading\\worker-control.service.ts",
+        "sha256": "3083e423b7888c953dbc955016125372c6506049d4913ddc62a9463237a236db"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\problem\\dto\\problem.dto.ts",
+        "sha256": "367c6f530aeeda154bb004365c6ec4562eb3294fc8deae36bba9aef818dc7d63"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\problem\\keyword-rules.controller.ts",
+        "sha256": "d7bdd24a0ee34b438325dc442b9da88d1af81367c6e7836c83a7f87565d029ef"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\problem\\problem.controller.ts",
+        "sha256": "93ab56631936d9f0ac552d19850278fcd3ccda2d9f443a3458d713c3adbfa63e"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\problem\\problem.module.ts",
+        "sha256": "7c9dca5a3c970d106f1c0f2463285bc34d1a26b93c7deb8bc5582b29992d537e"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\problem\\problem.service.ts",
+        "sha256": "9858250d2a90c60debaeeb244b06300ed946d1f9f4aff3c8e3b603f2ef43bbc1"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\submission\\submission.controller.ts",
+        "sha256": "3da1d43d124a5abd2fd7daf007fc57f445d0e1880675373beca8dca1275949ad"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\submission\\submission.module.ts",
+        "sha256": "52f4307b0be401014be22a33b1911f8c299569bd6c3655ec0370076c1ebf3202"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\submission\\submission.service.ts",
+        "sha256": "4299a2eb94dd2b2b9951aafe8faad0ac4a4efaddc55d77c6a18e26d3fd99260f"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\user\\avatar.controller.ts",
+        "sha256": "5b50d8d0beabd5a0ddf117f52b2da7714685b63ea2ad4b31e5f4a08fa527a390"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\user\\avatar.service.ts",
+        "sha256": "50e3cead6234bbe492a1430f6804b882750382a6a8b1fb5abadbf9f413a53da9"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\user\\dto\\user.dto.ts",
+        "sha256": "b0a714ba4730cc105b4dbdae4214ff182757a9cdfd70d47fc66cc97f27a21992"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\user\\user.controller.ts",
+        "sha256": "7f056d22dc0dcd3ba589e53f7b90d931db1a5654d0b3206e8bbf73e90814505b"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\user\\user.module.ts",
+        "sha256": "f55dd45b9ecc0f53d54c9e3183cfe3e95a574d3d90a6e8310a67f70d80dd338f"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\modules\\user\\user.service.ts",
+        "sha256": "0b4b0012cce7377ae4a046ad4abb303529d86073f9dfc8da841bb72037f9bd79"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\utils\\file.util.ts",
+        "sha256": "2c43d1e7bd023f4d3f9f1a3f2f1cf656a4468001024d756c05d2bdd60b84b384"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\utils\\index.ts",
+        "sha256": "6f54f112f67431fe1181b83b40bca2e39a3f040bb9e48f234765ce7d49968faa"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\utils\\optional.pipe.ts",
+        "sha256": "6c50af32353da9a546be175b853f421716f830dea418eec5eb6af4ea9809056f"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\utils\\password.ts",
+        "sha256": "9c5bcf70e06faee2c9a1c2b3644f5b377db18f5f6bd8a167fcf5793e8c5a93b4"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\utils\\pdf-title.util.ts",
+        "sha256": "10eb116d626a8a54227b89f62cbb85fc3d2a4b6000336d290986ed4e0590f20e"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\utils\\search.ts",
+        "sha256": "de406fe068abb70ff831760ca1ff1f8edd383568c6e73040459d89f2b24272b4"
+      },
+      {
+        "path": "D:\\otog\\apps\\api\\src\\utils\\security-middleware.ts",
+        "sha256": "9565043395248de57bdf0d71a877c01efc0664fea626d0b4e3fb45029cfc2f15"
+      }
+    ],
+    "web": [
+      {
+        "path": "D:\\otog\\apps\\web\\src\\@types\\next-auth.d.ts",
+        "sha256": "f92d3a82246ccff4a0fedffd667444209b1016c7e99214831f3b53a82944f0b6"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\api\\auth.ts",
+        "sha256": "6dce5de3cada4c1eba58b01a779ca7bd5b85c4b5bec9d2e07547773439270f8a"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\api\\avatar.ts",
+        "sha256": "9b0a46bf4ee22ac1393bca44858026c5a48ca30037cddc93107d9cc4feaccdf1"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\api\\browser.ts",
+        "sha256": "8cabeab3b8cf83a4059b6a3397e039dc000e8d092886a66008f627137b75b0a7"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\api\\index.ts",
+        "sha256": "02e62b3fa4f79f6cf84d28bb9d2074e35adb7c686da2ceb1abb4456a13d1c6e8"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\api\\lib.ts",
+        "sha256": "3d1168ac3a889daecb55df334c0ff2796e73155af20be4c4799ff9dd8b2372ef"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\api\\query.ts",
+        "sha256": "6cfc6e94f4c65d4a9709d0d7264cfbd6915310a4e684e39cae59f1be7b29d5af"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\api\\server.ts",
+        "sha256": "d381f855eda2fc351f35fcf46519688093c4b47a3f15d6d6e57210363fd8109c"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\avatar-upload.tsx",
+        "sha256": "9e77e2aa638e203b3506251fd5759a4565c0ea46705db2917079f610a52e7930"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\chat.tsx",
+        "sha256": "7458b7be2059bdd1ee91c4bb6891da9439c9d2e08b3961c2f3812013f8a09df4"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\client-only.tsx",
+        "sha256": "ffc0240a4f06c0d3a1690169e27c87ddcaa2cfffd278045f599d79662e0b0974"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\cloud-avatar-upload.tsx",
+        "sha256": "8af763d45e09640f866e679e06b8467a36aefd0a6837108c7e8337946df90425"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\code-highlight.tsx",
+        "sha256": "e914309a1d873a1c8a21037d5105a957dda74092d1989934e6426eb294bcb8b6"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\debounced-input.tsx",
+        "sha256": "d734965cf6241509fde1da76c5cd59b57fc3679186263c347762673bb1795360"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\example-table.tsx",
+        "sha256": "93cf03433713004ba4e8b3e287e3004813d7dd8acfaf55631e3f21244adb7724"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\file-input.tsx",
+        "sha256": "ea7b4c0a0e18741b52fbe983f0c03bedd5aa27d4343bdc15b9841004f6d6bf3d"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\footer.tsx",
+        "sha256": "1ca7b9d7cdc8874eb804c54ba16402d3ea1fe0a8cc3309655cfb3ccc53456f45"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\grading\\chart-data.ts",
+        "sha256": "859dec1ed1c11aa4ce17da4236414a240cb914de9dfd83ef9307d4af8de1f521"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\grading\\resource-readings.tsx",
+        "sha256": "041cda9a66093dae241b2ee09c7e18def20bf19e37b7dacbf4bb48de4fbe470d"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\infinite-table.tsx",
+        "sha256": "05c2377078cb9c25d93f292982c857d85df82991326674e2624520334604868e"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\inline-component.tsx",
+        "sha256": "ddf5f4c26c5693430fe9e9aeebe130e7abf8b67fc1155379a74c655712a119ea"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\monaco-editor.tsx",
+        "sha256": "ed0ce675e78c8ec4cba1bbf2661348e76d17b4262e2b49c8bab89678ae5fee6c"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\navbar.tsx",
+        "sha256": "cc0d18ff32a324a093998eec8c06be9855150517ee739e5715cdd07453a5643a"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\portals.tsx",
+        "sha256": "fd6d5f83ce2a5a3eef558e34e93f9f6d9ef67d27ff308bb654ffc6e92a9aa31e"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\problem-detail.tsx",
+        "sha256": "3292827d19121b6f93ea06881c71b21e69cb0262391267276eadaea24e38d020"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\progress-bar.tsx",
+        "sha256": "999e17830dedec3ac80607ec21bc42d60260ce69c416cdb079fee53d02068cc6"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\score-history-dialog.tsx",
+        "sha256": "e27bc547646bdd215cb170ed302d430691f96abd1837ba2db6396a447085db9c"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\search.tsx",
+        "sha256": "ecea955300b941f8ae9f4328516e925624df33ee4876a9dc371b34e4282e1db4"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\submission-dialog.tsx",
+        "sha256": "f5706ecc447080e75015d8ba6a9f78a7768bde439f1167f0c90c9d5185196d56"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\submission-status.tsx",
+        "sha256": "0f321a5b611708f7455d6de8ee73cd0f81e4f6a48da093ce1f7e30021036476c"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\submission-table.tsx",
+        "sha256": "6c62e41436ac1a2814e0977bfbb4614e235a5c299c9240206f02ebe753760a4e"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\table-component.tsx",
+        "sha256": "86c2d727e66ae77c8bc4853822707bd90b9635740fa88c7635ec2608d1c779cc"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\theme-provider.tsx",
+        "sha256": "903f167960116e3ee1216afdc4ef672d4c2a5ecebb66fc9ec7064a8de64dd689"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\components\\user-avatar.tsx",
+        "sha256": "0bf61ce8a3a51bbb1ca172952cd1ea71ef6e72f4cfc2a671041648599869dd3a"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\context\\socket-context.tsx",
+        "sha256": "fada963cd78a3b2c326a99cb40e92713fb6763e5a4d670cd881ed7e84ebf4176"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\context\\user-context.tsx",
+        "sha256": "f6cbcdbbbe2058af9d956c57caf40eeecbda78e5e4fec7581e986e11db4ec92b"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\enums\\index.ts",
+        "sha256": "764f197db6b02f8aa90d814595560f0715cd25870e81479c9b8ad72cad47eb8c"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\env.ts",
+        "sha256": "2a8ff44d816d589b8957c45c77eebdf221bc43a3a450be2c92ec32488b46f7ec"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\firebase\\get-avatar-url.ts",
+        "sha256": "f80d80f46291ab68cd6c5da7f53e558a2f9e9f511cf8fd15f2380db7cce41d8d"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\firebase\\index.ts",
+        "sha256": "c500ff59f81fd5f45c2832f8c2ed2be5c0df1cb02d6c63438e8afad1803220e9"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\fonts\\index.ts",
+        "sha256": "aae0252a2ad17181f403b5ea5fa04a3a77ea275ad6943341dd7f9d771f9445ab"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\hooks\\use-clipboard.ts",
+        "sha256": "2c1f8ebc83114d422152e68f5e0683dda464815833aa14465cf2093a6bdf0132"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\hooks\\use-container-breakpoint.ts",
+        "sha256": "9409261c84a1a2646f03c3f93c03c74b2bc733ad9dd3524302d4eec0d3e8f372"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\hooks\\use-disclosure.ts",
+        "sha256": "4a49d1b67ce569dcabdf55bd5af61c803467febf0809031c34c38e1180d24122"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\hooks\\use-effect-event.ts",
+        "sha256": "30a8c0dceffce4b7d5dfb243b93d703a7851ffee10832377f6c33cebd32ee624"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\announcement\\constants.ts",
+        "sha256": "692e958941b254c77f6519859607302ee9f43dd0bb933e4c4403796b2265e287"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\announcement\\editor.tsx",
+        "sha256": "f5f6202ec2ec1cc8e1e6b2bbcbdb77fe441485c1b48f70531329e1f48e54117c"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\announcement\\elements.tsx",
+        "sha256": "738bb9dd3e711b774be3adde52099c21fbadd1c4b318f133c19bead615212f74"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\announcement\\index.tsx",
+        "sha256": "aafd2d2f29ad8887903a427b1e4fc45bb97ba745a758ec4dcb34268cc96a3581"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\announcement\\modal.tsx",
+        "sha256": "2b7a8f485f9cd1265b79bed87fae41211abbef2b6f2c0d59a2ec66597e14dfe0"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\announcement\\readonly-editor.tsx",
+        "sha256": "97baf53ed1a0853f4260d10442f0dd7cba80a8e62210ea3bd787d422684131fd"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\announcement\\utils.ts",
+        "sha256": "ef3bc92507079c517cd7db69e9b74d90ab46dff31fd1531c5e2695a1067fdac9"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\contest\\sidebar.tsx",
+        "sha256": "358a38adfd92944e948fb949775095afdee1bf3e9a623ad172046a48452373f7"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\contest\\task-card.tsx",
+        "sha256": "913eb084eee8adf5fc118e0e5858df763076d3a7f8796ff0c9c4abc80368c5d4"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\problem\\problem-table.tsx",
+        "sha256": "d06fe578cafdee38d9b96246c5eae1e42a52adc94146920757eb2158b5b3d854"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\problem\\submit-code.tsx",
+        "sha256": "8e70da83b040dd4901879cbe4584c35c8a97e72e63e0bfc4a1557d8fff3843a7"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\modules\\problem\\use-keyword-check.tsx",
+        "sha256": "c19b8269c45d34de75071be537a4d24af046b5c37ec77d369d6e4ab60b10ee7b"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\_app.tsx",
+        "sha256": "ff7f5fa7ce2af5c647daf078961bbfb3857e6a38c72acb4c5a5168e282f6b02d"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\admin\\contest\\[contestId].tsx",
+        "sha256": "c89c926ffaa049cbf1a335145edb24620a62bcb66da6f302b84d93981e250aa7"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\admin\\contest\\index.tsx",
+        "sha256": "afd844567c77ea4526fba1b90e15f66e312f4a7ba4e09f40a079cd7227ff5a91"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\admin\\grading.tsx",
+        "sha256": "af4b6a5bf56cea4ece3dbe7c05118171b612e97cf34270cc2c56fda079375e68"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\admin\\index.tsx",
+        "sha256": "7987f327ecef18e8211f33f8360ccc65fd0d66197aa0abad4377a7f2934b5d5f"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\admin\\user.tsx",
+        "sha256": "8a93d892f38ade1c0f09049e82c11563b3824c9e2216ff80c188714ddcaa9aa1"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\api\\auth\\[...nextauth].ts",
+        "sha256": "bb073be330d4c361ae8aa14a4280d815f3809e53b811a9762a3c455a2de8d6f5"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\api\\problem\\[problemId].ts",
+        "sha256": "952837c31e0f3e05fcee341230e84fccfbf6052ea5e671f878fdc33b8dd3c00a"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\contest\\[contestId]\\announcement.tsx",
+        "sha256": "438c67fa9b0584db33a781ae2783d301a46d771038e7dc3af2ce175694f87225"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\contest\\[contestId]\\index.tsx",
+        "sha256": "a55bdf0d2444fc2f8ac2a00f12e10ec4d48741c2beda3d1b456b87ec5a9bda65"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\contest\\[contestId]\\problem\\[problemId].tsx",
+        "sha256": "22e340592779fedc78a8c7457becd1e9d1531b8f68cc6ea1fbb2351cbe08fa6e"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\contest\\[contestId]\\scoreboard.tsx",
+        "sha256": "0f887a7fa2721adafb1f599db8c77803946eea9bda3303ed1db50630a1156041"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\contest\\[contestId]\\submission.tsx",
+        "sha256": "93c1996dbc31e8aaef1ed029f720429dd65f033185cbe4f7fee0cb4c682ddd96"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\contest\\history.tsx",
+        "sha256": "32a7252525428ddd487911f9ab4ed54a2d54bdbb5ce59824406fe06fd04ee23a"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\contest\\index.tsx",
+        "sha256": "11f783cf780bf8eed0861c7303a76f68a12d766b6095f963b181789117399ce2"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\index.tsx",
+        "sha256": "348b564be1d5a66a419791b4b325bceacc4f7c05bed101130ad6543f31addf04"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\login.tsx",
+        "sha256": "b744b1516cbb0afbcd1775c4825a7e0108c73c40f3f7212ffd36a4bfa20a8ce1"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\problem\\[problemId].tsx",
+        "sha256": "d0fefa4e6ac1a9d6a5013d7478aa15f7785c8266b4bf7fa266325361d6a2db47"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\problem\\index.tsx",
+        "sha256": "49b80443bfbd0026d7b4132c1c3860c32d0c623c91a4850c7019cfb72ce6f3c4"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\register.tsx",
+        "sha256": "be254858e3103c1abee9fdc5595536580aba5f48340ccd31ad77e5fce46dd9cc"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\submission\\[submissionId].tsx",
+        "sha256": "3a956d0d3cd247cfe9b7b5b3958fc6a36416d36d357a391ebb9c67a0b172bddd"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\submission\\index.tsx",
+        "sha256": "e2074e848ad2bcb0622ea22f1af3de795661b3901cbc5e1ff1057482b09e57b1"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\pages\\user\\[userId].tsx",
+        "sha256": "d0e9956947164d8999963bcb6906a725f55cb5e82d8c53621784d0f34d126d78"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\utils\\exhaustive-guard.ts",
+        "sha256": "434067dce6a69cde24e9035277ec1b97be9f022eec82bda2065249e006218d14"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\utils\\initial-data-success.ts",
+        "sha256": "4e4831b7784672d6048a30b01975c9dfe3e7b307b84a571ad470580b2dea07b4"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\utils\\time.ts",
+        "sha256": "e57e70a6611417b8f60be8b5c77bb7ee6af39dfc3f801fdfa68eafb58853d10a"
+      },
+      {
+        "path": "D:\\otog\\apps\\web\\src\\utils\\use-timer.ts",
+        "sha256": "48d33b619ec3d4f1b04bc8b177df1bb498b62e563543651574e673bf05a00425"
+      }
+    ],
+    "contracts": [
+      {
+        "path": "D:\\otog\\packages\\contract\\src\\index.ts",
+        "sha256": "082145b7b9b7b7efd3a1b8142ea2096595184576284feeab89f63d495190e96f"
+      },
+      {
+        "path": "D:\\otog\\packages\\contract\\src\\keyword-rules.ts",
+        "sha256": "d4087beea3ea0aaa6d989478ba850e82d7c6663569a2ca43ab8264b4897d0a11"
+      }
+    ],
+    "database": [
+      {
+        "path": "D:\\otog\\packages\\database\\prisma\\schema.prisma",
+        "sha256": "ff8b18a509c7149633f346675fb291626d74094702cb856d092828640bb69e91"
+      }
+    ],
+    "grader": [
+      {
+        "path": "D:\\otog-grader\\src\\checkType.py",
+        "sha256": "b0b98f76eafe1a8ee8e2e682db4d2f4fc45aeff4600e56d335518aee2ebadc40"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\cmdManager.py",
+        "sha256": "714c8c6f0a3b5191dc05135fa60c7a89e38112e3dce984ba9b9afd6a34a1d103"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\config.py",
+        "sha256": "7410f15b3c300e2411191926b96c401669bc6f128292da4f5ab747704bfb026a"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\constants\\colors.py",
+        "sha256": "8e75b907ac4a3fd1c54ccec98f0056e5a3a88142c46485825b4744c32055582c"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\constants\\command.py",
+        "sha256": "5242c68a042df36381e6307939082e35bd11ae7bd7580aa3ed1039cda198288f"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\constants\\Enums.py",
+        "sha256": "179c0f3f3aa8f5d5cb3c1705c010996e5f1cfe7b3765884e4099b038d6ebc46c"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\constants\\LoggingMsg.py",
+        "sha256": "b801045680295d41c8ad8af6ae2e24ad6bde0b467ac8a31d4a5333a9786d7cef"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\constants\\osDotEnv.py",
+        "sha256": "603acece5bfc6841a3ff48f1772470e4f3f7580ec39a2cb0e260c519f7a932e2"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\constants\\verdict.py",
+        "sha256": "36affc4c5bad05da9fdb1c9d96160a698f6aff76e8240035edf30c52ea4f8438"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\DTO\\contest.py",
+        "sha256": "928df5b8329a7743c5c77049cef02ed869d6b4f60adb978f042d0545fabd0d83"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\DTO\\evaluate.py",
+        "sha256": "6d258d1291343ab35c0ba6a49aaec21de3c96f417b3f88fd3b3c3f1986f7fb92"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\DTO\\result.py",
+        "sha256": "8e746d0b09985e63b6b5c06dc36ca7fc48bcbe55d3e97405c842591bf6f672e4"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\DTO\\submission.py",
+        "sha256": "c0c5a22798af744894d9a732c25f59a173e65a4a79cb1c64bb25f80fe3a715fa"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\DTO\\subtask.py",
+        "sha256": "47c86a2a29289f34411ca8bd8868c9dbcc57f5efaefc2cc38e27708a1214c55d"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\DTO\\testcaseData.py",
+        "sha256": "a6d316d7faf141e517d5652e4f6cf93cd17953bb7ffe7f564a827fadc5612e69"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\DTO\\verdictTestcase.py",
+        "sha256": "0a97172de0869f6a4eec625e6ff3631a0c067e0ce13890cb1f6de99ddd51c450"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\errorLogging.py",
+        "sha256": "cf31b3e05a544709d24fcd6dd5fea792d4c12da782520a42e925a2047c53ade3"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\evaluate\\classic.py",
+        "sha256": "aa42bb30f35afdba54434f2ce16db26cd03df281bc2aff3cb8348848c71d880d"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\evaluate\\codeforces.py",
+        "sha256": "2a2f284f547e3b077f28f9334399a1839d6f9955c754c486ad184feda889e83a"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\evaluate\\main.py",
+        "sha256": "f25bf2310628cb7427ca5f59d6a05205724cb24dc086716543cad0c79cd6e187"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\evaluate\\verdict\\cppCheck.py",
+        "sha256": "e2c15d0400195807be87be48c51041a99b9c1696b9e49026c349fc4ab47af29f"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\evaluate\\verdict\\main.py",
+        "sha256": "d72cec6a2cfdfd13764bb8d63d5860167257d66789407c9b4c7f795af76f9bce"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\evaluate\\verdict\\ogogi.py",
+        "sha256": "f02e7b7a32ded6285e69bdaaf5ceef16c4ca79702c9df25a5c0ecdd3fd8dd18c"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\evaluate\\verdict\\standard.py",
+        "sha256": "c1655c28072e3b574c7e45c16515d877409187e25fb002b7f1dd844c84a7fe8b"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\evaluate\\verdict\\thaco.py",
+        "sha256": "eb8b4d8a14f953b43116d3a0a4a8dfc13fa4e6944e2a02b79c9338f37406a114"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\grader_safety.py",
+        "sha256": "56172b554246f3cdc60574404ddb7c45b2dff8689f9ec4e4093ffe95b1c41231"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\handle.py",
+        "sha256": "381eaf244b035dd777fc99d31ddcdbcd99c9038336d7983b66886df85bd7b953"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\httpSync\\httpQuery.py",
+        "sha256": "57249923584c706f98c0882c2983ce054d1383078608626d98bda166840597af"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\judge.py",
+        "sha256": "12b322146144f21d7b53f3201411a6f6d63f8627014ef4eee5e9c66d270337c8"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\keyword_rules.py",
+        "sha256": "478dfbda43cb85539a5553806ab5d74df7fbad092bfff579386c67f291ccf09b"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\mainHttpSync.py",
+        "sha256": "d1d412696b7e7cf94c31ed46a65a3dfdcdb73b3a380c81447cf5c88c03e68d9e"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\mainLocal.py",
+        "sha256": "6a6734e25574ad4b270aec54e71805a2eef8aa56e837fdd7b7e45bed6d9fc368"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\mainPostgresql.py",
+        "sha256": "19510d69630fe16bc802ec7e79e0915a1e6f686bf594a50791ec3725e43f57fa"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\mainPostgresqlModBalance.py",
+        "sha256": "7e6bf71d5908a9a9830b0a185498901c31ca415cf29c15379fdea2478f71e26d"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\mainTest.py",
+        "sha256": "590b592cbd8e04db3ebf049b29307e71dc36d7aab50b7e4a19df57bedf94f5d1"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\mainWorkers.py",
+        "sha256": "60cfbd458dc0555d2a55a678f059a5c11fd203587e952d50d09e426cf40a2e75"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\memory_guard.py",
+        "sha256": "06524606da96dd43ae6b993b634146652c1d622944c4db2a1af3be0694f1febf"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\message.py",
+        "sha256": "685895b3ef0c59b2fec2411320981f42e23299cdaef8abb81fba1e861d4fb436"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\postgresql\\dbConfig.py",
+        "sha256": "27931ac6b628526190b48ddfd7a76401aa89dc49174df8ce1c28d12e8d3b0a23"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\postgresql\\dbInit.py",
+        "sha256": "5ccac9a786a6c4980e891cec808b4afcfb090f3d6a9131ea0f21a2c4a8c69994"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\postgresql\\dbQuery.py",
+        "sha256": "99d097375ac48a5bc23431a942f405638347f6d10b30036e7121f2b1a5c2f905"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\sandbox_security.py",
+        "sha256": "dfe64e8fc3ccca8989e55bfd500b0be0766cf565b2032a15135234f954855d02"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\subtask.py",
+        "sha256": "b2f0ebcff5765f423fa9393b0dd80eb728fbdfc12ef38e878e1c75533481a1a8"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\worker_control.py",
+        "sha256": "3f753236e2c339b9a9dc1f563c710c844932dd65539b56d60b7b9841345030ba"
+      },
+      {
+        "path": "D:\\otog-grader\\src\\worker_queue.py",
+        "sha256": "4432a015b4047a6289e9e9845861d05435a8824e425c84ee585706ee27cd7f2e"
+      }
+    ],
+    "deployment": [
+      {
+        "path": "D:\\otog-grader\\deployment\\isolate-depth-20261017.patch",
+        "sha256": "bbf1d0385e0066da58ccbccfc8739b2e8e06c7af3639b7f91b561ae076408d94"
+      },
+      {
+        "path": "D:\\otog-grader\\deployment\\monitor_agent.py",
+        "sha256": "f4acb48c3a8ab920d76920f08677f5f523cbc0a60b5d49841856c0d239101cb5"
+      },
+      {
+        "path": "D:\\otog-grader\\Dockerfile.glibc",
+        "sha256": "9da6d84f3424ff446135fa3c0a73d8bacbb646d1ab263e6a45ea6edd9e7c467e"
+      },
+      {
+        "path": "D:\\otog-grader\\worker-entrypoint.sh",
+        "sha256": "f6dba6b0b4f2f8e39e8acaf3fc8381e6342fa665ce81cc1f783a94159ca4258a"
+      }
+    ]
+  }
+}

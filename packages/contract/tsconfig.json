@@ -1,0 +1,10 @@
+{
+  "extends": "@otog/config/tsconfig/base.json",
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "lib": ["ESNext"],
+    "target": "ESNext"
+  }
+}

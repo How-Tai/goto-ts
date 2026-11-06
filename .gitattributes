@@ -1,0 +1,5 @@
+# pnpm hashes dependency patches; keep their bytes stable on Windows checkouts.
+patches/*.patch text eol=lf
+
+# Linux deployment scripts must retain LF endings.
+*.sh text eol=lf

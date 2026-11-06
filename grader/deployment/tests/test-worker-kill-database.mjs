@@ -1,0 +1,50 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {pathToFileURL} from 'node:url';
+const require=createRequire('/home/otog/otog/apps/api/package.json');
+createRequire(require.resolve('@nestjs/common'))('reflect-metadata');
+const {PrismaClient}=require('@otog/database');
+const {WorkerControlService}=await import(pathToFileURL(process.argv[2]).href);
+const name=process.argv[3];assert(/^otog_worker_test_kill_\d+_\d+$/.test(name));
+const url=new URL(process.env.DATABASE_URL);url.pathname='/'+name;
+const prisma=new PrismaClient({datasources:{db:{url:url.toString()}}});
+const startedAt='2026-10-11T08:00:00.000Z';
+try {
+  await prisma.$executeRaw`UPDATE "otogWorkerState" SET "startedAt"=${new Date(startedAt)} WHERE "workerId"=4`;
+  await prisma.$executeRawUnsafe(`INSERT INTO submission (id,"userId","problemId",status,"sourceCode",language) VALUES (990,990,1,'waiting','int main(){}','cpp')`);
+  let releaseClaim,claimLocked,killReading;
+  const claimGate=new Promise(resolve=>{releaseClaim=resolve;});
+  const locked=new Promise(resolve=>{claimLocked=resolve;});
+  const reading=new Promise(resolve=>{killReading=resolve;});
+  const claim=prisma.$transaction(async tx=>{
+    await tx.$queryRaw`SELECT "workerId" FROM "otogWorkerState" WHERE "workerId"=4 FOR UPDATE`;
+    claimLocked();await claimGate;
+    await tx.$executeRaw`UPDATE submission SET status='grading' WHERE id=990`;
+    await tx.$executeRaw`INSERT INTO "otogWorkerJob" ("workerId","submissionId") VALUES (4,990)`;
+  });
+  await locked;
+  const instrumented={$transaction:(cb,opts)=>prisma.$transaction(tx=>cb({$queryRaw:async(strings,...values)=>{
+    if(strings.join('').includes('FOR UPDATE')) killReading();
+    return tx.$queryRaw(strings,...values);
+  }}),opts)};
+  let dockerCalls=0;
+  const service=new WorkerControlService(instrumented,{invalidate(){}});
+  service.dockerRequest=async()=>{dockerCalls++;throw new Error('Docker must not be called for a stale confirmation');};
+  const kill=service.kill(4,{startedAt,submissionId:null},7);
+  const rejected=assert.rejects(kill,error=>error.getStatus()===409);
+  await reading;releaseClaim();await claim;await rejected;
+  assert.equal(dockerCalls,0,'Claim committed while Kill waited: stale idle confirmation must be rejected');
+  assert.equal((await prisma.$queryRaw`SELECT "submissionId" FROM "otogWorkerJob" WHERE "workerId"=4`)[0].submissionId,990);
+  const current=new WorkerControlService(prisma,{invalidate(){}});
+  const container={Id:'b'.repeat(64),Config:{Image:'otog-grader',Env:['OTOG_WORKER_ID=4'],Labels:{'com.docker.compose.project':'otog','com.docker.compose.service':'grader4'}}};
+  current.dockerRequest=async(method)=>method==='GET'?JSON.stringify(container):'';
+  await prisma.$executeRaw`UPDATE "otogWorkerState" SET enabled=false WHERE "workerId"=4`;
+  await current.kill(4,{startedAt,submissionId:990},7);
+  assert.equal((await prisma.$queryRaw`SELECT enabled FROM "otogWorkerState" WHERE "workerId"=4`)[0].enabled,false);
+  assert.equal((await prisma.$queryRaw`SELECT status FROM submission WHERE id=990`)[0].status,'grading');
+  assert.equal((await prisma.$queryRaw`SELECT count(*)::int AS n FROM "submissionResult"`)[0].n,0);
+  await prisma.$executeRaw`DELETE FROM "otogWorkerJob" WHERE "submissionId"=990`;
+  await prisma.$executeRaw`DELETE FROM submission WHERE id=990`;
+  await prisma.$executeRaw`UPDATE "otogWorkerState" SET enabled=true,"startedAt"=NULL WHERE "workerId"=4`;
+  console.log('Real PostgreSQL claim/Kill race rejected stale confirmation; Kill preserved Pause, leases and results for worker-owned recovery.');
+} finally {await prisma.$disconnect();}

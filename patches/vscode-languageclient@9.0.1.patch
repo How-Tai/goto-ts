@@ -1,0 +1,42 @@
+diff --git a/lib/common/fileOperations.js b/lib/common/fileOperations.js
+--- a/lib/common/fileOperations.js
++++ b/lib/common/fileOperations.js
+@@ -66,9 +66,7 @@
+         }
+         const minimatchFilter = data.registerOptions.filters.map((filter) => {
+             const matcher = new minimatch.Minimatch(filter.pattern.glob, FileOperationFeature.asMinimatchOptions(filter.pattern.options));
+-            if (!matcher.makeRe()) {
+-                throw new Error(`Invalid pattern ${filter.pattern.glob}!`);
+-            }
++            // Minimatch 11 validates in its constructor and does not expose makeRe().
+             return { scheme: filter.scheme, matcher, kind: filter.pattern.matches };
+         });
+         this._filters.set(data.id, minimatchFilter);
+diff --git a/lib/common/diagnostic.js b/lib/common/diagnostic.js
+--- a/lib/common/diagnostic.js
++++ b/lib/common/diagnostic.js
+@@ -611,9 +611,7 @@
+                 }
+                 if (filter.pattern !== undefined) {
+                     const matcher = new minimatch.Minimatch(filter.pattern, { noext: true });
+-                    if (!matcher.makeRe()) {
+-                        return false;
+-                    }
++                    // Minimatch 11 validates in its constructor and does not expose makeRe().
+                     if (!matcher.match(resource.fsPath)) {
+                         return false;
+                     }
+diff --git a/lib/common/notebook.js b/lib/common/notebook.js
+--- a/lib/common/notebook.js
++++ b/lib/common/notebook.js
+@@ -275,9 +275,7 @@
+         }
+         if (filter.pattern !== undefined) {
+             const matcher = new minimatch.Minimatch(filter.pattern, { noext: true });
+-            if (!matcher.makeRe()) {
+-                return false;
+-            }
++            // Minimatch 11 validates in its constructor and does not expose makeRe().
+             if (!matcher.match(uri.fsPath)) {
+                 return false;
+             }

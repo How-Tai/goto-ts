@@ -1,0 +1,44 @@
+# Security report follow-up — 1 November 2026
+
+Reviewed the supplied report for `How-Tai/goto` commit `5f8a6ed` against the deployed CF release and current source. The API/web fixes are deployed with frontend build `Lpak45bS0-EU96H4fwPdY` from `/opt/otog/security-report-20261101/workspace`. Existing JWT signing keys, grader containers, and allocation were preserved. Five graders remain selected, revision 66.
+
+Final API entry point: `apps/api/dist-feedback-final/index.js` in that release. This separately built artifact includes the acknowledgement that keeps HTTP polling enabled when an account's WebSocket work is deferred and releases account connection slots when a transport closes during authentication; its regression and real API/NextAuth checks passed before the final API switch.
+
+| Finding | Verification and remediation |
+| --- | --- |
+| S01 | Confirmed fresh-install configuration drift. All seven live workers already had nonprivileged/read-only containers, memory/PID bounds, default seccomp, enforcing AppArmor and read-only testcase mounts. Repository Dockerfiles now build pinned Isolate 2.7 (`8f185bb37f3f23e29b33b0c7727c91c13429abe3`) with the exact reviewed local native patch. Hardened Compose, profile, config, bootstrap and a 1–7 worker renderer are included. Incompatible privileged legacy Compose modes are retired. CI verifies policy, builds the image and runs bounded container/checker tests. |
+| S02 | Confirmed. Login requires bounded string credentials in the body and rejects query credentials, including mixed inputs, before Passport. Middleware and the local guard use the same extraction function and exact case-sensitive username. JSON and form requests remain supported. |
+| S03 | Confirmed shared frontend-peer bucket. NextAuth now signs the original client address with a separate server-only HMAC secret; the API validates signature, timestamp and address. Account buckets remain independent. Limits: 120 attempts/client/minute, 30/account/minute, plus a distinct 1,000/minute overall capacity limit. Only explicitly trusted proxy peers may supply forwarding chains; chains are inspected from the nearest untrusted hop, never blindly from the left. |
+| S04 | Confirmed. Ordinary reads, contest detail/problem routes and combined pages now share one viewer-aware problem filter. Hidden problems require a currently active contest for ordinary accounts; admins retain access. Authorization is rechecked before metadata/scoreboard cache results are returned. Also corrected an additional scoreboard path that returned full problem rows: standings now contain only required problem fields and authorized problem identifiers/scores. To expose archived problems publicly, explicitly publish them with `show=true`. |
+| S05 | Confirmed missing refresh ownership binding. Refresh consumption atomically matches RID, jti, userId, unused state and expiry; malformed identity claims fail before lookup. The live JWT key passed the new configuration policy; there is no evidence of the report's conditional takeover prerequisite here. Production rejects weak/empty/example keys. Predictable template JWT values were removed. Unknown-user and wrong-password failures now share status/message; public username discovery and timing differences are not claimed eliminated. |
+| S06 | Confirmed. Account-wide limits cover eight sockets, 1,000 total watched subscription entries and two concurrent database operations. Cheap account event/watch/chat/connection admission happens before database work. Malformed chat messages are checked before revocation lookups; admitted valid work retains revocation checks. Disconnects and failed handshakes release reservations. These limits are in-process, appropriate to the current single API instance; multiple API replicas require a shared admission store. |
+
+Production PostgreSQL and MinIO were already bound to loopback. The checked-in production Compose now defaults those published ports to loopback as well and explicitly enables production environment validation. Publish required S3 traffic through a configured gateway rather than exposing the administration console.
+
+## Dependencies
+
+Updated locked `qs` to 6.17.1, the glob 10 dependency line to 14.0.3, and minimatch 9/10 dependency lines to 11.0.3. Verified actual Next ESLint caller behavior, glob cancellation, Express query handling and the production builds after the overrides.
+
+The final npm audit reports **two moderate version matches, zero high/critical**, both for minimatch 3.1.4 and 5.1.9 under [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249). Those installed branches do not contain `firstPhasePreProcess` or `optimizationLevel`, the implementation/option named in the advisory. Their callable CommonJS API is retained for legacy consumers; blindly substituting minimatch 11's module API would break those consumers. This is a documented applicability qualification, not a clean audit or a claim that all minimatch behavior is safe. Prefer compatible parent upgrades when available.
+
+Advisories verified directly: [glob](https://github.com/advisories/GHSA-3g3m-2fjr-6pw4), [minimatch](https://github.com/advisories/GHSA-g3hv-75wg-m249), [qs](https://github.com/advisories/GHSA-6pq8-jhm2-2vcw). The current ngrok topology appends the actual client address as documented in [upstream headers](https://ngrok.com/docs/gateway/endpoints/http#upstream-headers). Additional proxies must be configured explicitly; never trust arbitrary forwarded headers.
+
+## Validation
+
+- Five bounded regression groups exercise actual admission, Passport, refresh strategy/service, authorization and socket implementations. JSON/form HTTP login works; query credentials never reach the password verifier. Distinct signed clients remain independent; forged forwarding signatures are rejected.
+- Full candidate Nest API and disposable PostgreSQL schema: login status/message, successful authentication, refresh ownership/replay, active/ended hidden problems, details, combined page and scoreboard checks passed.
+- Real NextAuth CSRF/callback/session HTTP flow through the candidate frontend and API passed using fixture accounts and an independent test signing key.
+- Existing page-cache/concurrency/queue tests and actual upgraded dependency callers passed. API/frontend type checks and production builds passed.
+- Fresh image `otog-grader:report-20261101` built from repository Dockerfile, pin and patch. Benign container probes confirmed enforcing AppArmor/seccomp, no-new-privileges, private cgroups, read-only root and absence of host disks/Docker socket. All 15 checker regressions passed, including recompilation across submissions and private diagnostics; no custom-checker cache was introduced.
+- Public HTTPS login, problems, CF area and API health returned 200 after rollout. A bounded live query-login rejection returned 400. All seven worker IDs/restart counts stayed unchanged, with fresh heartbeats.
+- No production fixture accounts/submissions were created, no production schedule was changed, and no hostile-submission or outage test was performed. Disposable database/services/credential files were removed. The native image test used no database or network. Browser visual inspection remains unavailable.
+
+This follow-up addresses the supplied findings and their confirmed adjacent authorization path. It does not constitute an exhaustive security audit, sandbox-escape proof, or a new full OS/Python/container advisory scan.
+
+## Deployment configuration
+
+Generate independent random secrets, for example with `openssl rand -hex 32`. Configure a strong API `JWT_SECRET`; configure the same separate `OTOG_AUTH_PROXY_SECRET` in API and web server environments. Keep both private. In the VM, the new shared proxy secret is provisioned in root-owned `/etc/otog-auth-proxy.env` (0600), loaded by systemd. The existing JWT key was not rotated. A deployment that previously used the example JWT key must rotate it and invalidate existing sessions.
+
+For Compose, supply `apps/api/.env` and `apps/web/.env.local` from their templates, set exact `OTOG_TRUSTED_PROXY_IPS` for the ingress peers in each service's topology, and keep backend listeners private. Configure the ingress to append/replace forwarding addresses reliably and strip untrusted internal authentication headers. The application validates signed authentication forwarding even if a client sends such headers.
+
+Local operational evidence is under `tmp/security-report-20261101/evidence`; transient transport/deployment scripts and evidence are excluded from the source commit. Review current state before reusing historical release helpers. The deployed API/web overrides can be removed to restore the preceding release if needed; preserve the new private proxy secret and review current sessions/configuration first. No database migration or grader rollout is needed for these API/web fixes.

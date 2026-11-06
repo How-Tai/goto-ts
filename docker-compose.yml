@@ -1,0 +1,32 @@
+services:
+  web:
+    container_name: otog-web
+    build:
+      context: .
+      dockerfile: ./Dockerfile.web
+    restart: always
+    ports:
+      - 3030:3000
+    networks:
+      - otog-network
+
+  api:
+    container_name: otog-api
+    build:
+      context: .
+      dockerfile: ./Dockerfile.api
+    restart: unless-stopped
+    volumes:
+      - ./apps/api/volumes/upload:/app/volumes/upload:rw
+      - ./apps/api/docs:/app/docs:rw
+      - ./apps/api/source:/app/source:rw
+    env_file:
+      - ./apps/api/.env
+    ports:
+      - 8080:8000
+    networks:
+      - otog-network
+
+networks:
+  otog-network:
+    name: otog-network

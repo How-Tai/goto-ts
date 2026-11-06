@@ -1,0 +1,500 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../__generated__/prisma-client"
+}
+
+generator zod {
+  provider              = "zod-prisma"
+  output                = "../__generated__/zod"
+  relationModel         = "true"
+  prismaJsonNullability = "false"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Announcement {
+  id        Int      @id @default(autoincrement())
+  value     Json?
+  show      Boolean  @default(false)
+  contestId Int?
+  contest   Contest? @relation(fields: [contestId], references: [id])
+
+  @@map("announcement")
+}
+
+model Chat {
+  id           Int      @id @default(autoincrement())
+  message      String   @db.VarChar(255)
+  userId       Int
+  creationDate DateTime @default(now()) @db.Timestamptz(6)
+  updateDate   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+  user         User     @relation(fields: [userId], references: [id], onDelete: NoAction)
+
+  @@map("chat")
+}
+
+model Contest {
+  codeforces       CfContest?
+  id               Int                @id @default(autoincrement())
+  name             String             @db.VarChar(255)
+  mode             ContestMode
+  gradingMode      ContestGradingMode
+  scoreboardPolicy ScoreboardPolicy
+  timeStart        DateTime           @db.Timestamptz(6)
+  timeEnd          DateTime           @db.Timestamptz(6)
+  announce         String?
+  contestProblem   ContestProblem[]
+  userContest      UserContest[]
+  announcements    Announcement[]
+  submission       Submission[]
+  contestScore     ContestScore[]
+
+  @@map("contest")
+}
+
+model ContestProblem {
+  contestId Int
+  problemId Int
+  contest   Contest @relation(fields: [contestId], references: [id], onDelete: Cascade)
+  problem   Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@id([contestId, problemId])
+  @@map("contestProblem")
+}
+
+model Problem {
+  area               String           @default("otog") @db.VarChar(16)
+  cfProblems         CfProblem[]
+  id                 Int              @id @default(autoincrement())
+  name               String           @db.VarChar(255)
+  sname              String?          @db.VarChar(255)
+  score              Int
+  timeLimit          Int
+  memoryLimit        Int
+  show               Boolean
+  recentShowTime     DateTime?        @db.Timestamptz(6)
+  case               String?          @db.VarChar(255)
+  rating             Int?
+  examples           Json?
+  contestProblem     ContestProblem[]
+  submission         Submission[]
+  contestScore       ContestScore[]
+  attachmentMetadata Json?
+  keywordRules       ProblemKeywordRules?
+  gradingLimit       ProblemGradingLimit?
+
+  @@index([area, show, id], map: "problem_area_show_id_idx")
+
+  @@map("problem")
+}
+
+model ProblemKeywordRules {
+  problemId       Int      @id
+  requiredKeywords String[] @default([])
+  bannedKeywords   String[] @default([])
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+  problem         Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@map("otogProblemKeywordRules")
+}
+
+model ProblemGradingLimit {
+  problemId  Int      @id
+  maxWorkers Int
+  updatedAt  DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+  problem    Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("otogProblemGradingLimit")
+}
+
+model RefreshToken {
+  id           String    @id @db.VarChar(255)
+  userId       Int?
+  jwtId        String?   @db.VarChar(255)
+  used         Boolean?  @default(false)
+  expiryDate   DateTime? @db.Timestamptz(6)
+  creationDate DateTime  @default(now()) @db.Timestamptz(6)
+  updateDate   DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@map("refreshToken")
+}
+
+model Submission {
+  cfRun               CfRun?
+  id                  Int                   @id @default(autoincrement())
+  userId              Int
+  problemId           Int
+  status              SubmissionStatus
+  contestId           Int?
+  sourceCode          String?
+  language            String                @db.VarChar(255)
+  creationDate        DateTime              @default(now()) @db.Timestamptz(6)
+  updateDate          DateTime              @default(now()) @updatedAt @db.Timestamptz(6)
+  queuedAt            DateTime              @default(now()) @db.Timestamptz(6)
+  public              Boolean               @default(false)
+  problem             Problem               @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  user                User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contest             Contest?              @relation(fields: [contestId], references: [id], onDelete: Cascade)
+  submissionResult    SubmissionResult?
+  ContestScoreHistory ContestScoreHistory[]
+  workerJob           GradingWorkerJob?
+  compilationProfile  GradingCompilationProfile?
+  compiledArtifact    GradingCompiledArtifact?
+  request             SubmissionRequest?
+
+  @@index([status, problemId, userId], map: "otog_submission_status_problem_user_idx")
+  @@index([userId, problemId, creationDate(sort: Desc)], map: "otog_submission_user_problem_latest_idx")
+  @@map("submission")
+}
+
+// Operational queue metadata is queried with bounded raw SQL by the monitor.
+// Models keep subsequent Prisma migrations from treating these tables as drift.
+model SubmissionRequest {
+  userId       Int
+  requestId    String     @db.VarChar(64)
+  fingerprint  String     @db.Char(64)
+  submissionId Int        @unique
+  createdAt    DateTime   @default(now()) @db.Timestamptz(6)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@id([userId, requestId])
+  @@map("otogSubmissionRequest")
+}
+
+model GradingWorkerJob {
+  submissionId Int        @id
+  workerId     Int        @unique(map: "otog_worker_one_lease_idx")
+  claimedAt    DateTime   @default(now()) @db.Timestamptz(6)
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@map("otogWorkerJob")
+}
+
+model GradingWorkerState {
+  workerId      Int       @id
+  enabled       Boolean   @default(true)
+  cpuId         Int?
+  processId     Int?
+  startedAt     DateTime? @db.Timestamptz(6)
+  lastHeartbeat DateTime? @db.Timestamptz(6)
+  updatedAt     DateTime  @default(now()) @db.Timestamptz(6)
+
+  @@map("otogWorkerState")
+}
+
+model GradingCompilerState {
+  workerId      Int       @id
+  enabled       Boolean   @default(false)
+  cpuId         Int?
+  processId     Int?
+  startedAt     DateTime? @db.Timestamptz(6)
+  lastHeartbeat DateTime? @db.Timestamptz(6)
+  updatedAt     DateTime  @default(now()) @db.Timestamptz(6)
+
+  @@map("otogCompilerState")
+}
+
+model GradingWorkerMemoryBudget {
+  id        Int      @id @default(1)
+  budgetKiB BigInt   @default(0)
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("otogWorkerMemoryBudget")
+}
+
+model GradingCompilationProfile {
+  submissionId Int        @id
+  createdAt    DateTime   @default(now()) @db.Timestamptz(6)
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("otogCompilationProfile")
+}
+
+model GradingCompiledArtifact {
+  submissionId  Int        @id
+  state         String
+  ownerWorkerId Int?       @unique
+  token         String     @unique
+  fingerprint   String
+  sourceName    String?
+  digest        String?
+  sizeBytes     BigInt
+  createdAt     DateTime   @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime   @default(now()) @db.Timestamptz(6)
+  submission    Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // The additional active-state partial index is maintained by migration SQL.
+  @@index([state, updatedAt], map: "otogCompiledArtifact_ready_idx")
+  @@map("otogCompiledArtifact")
+}
+
+model GradingWorkerMemoryReservation {
+  workerId     Int      @id
+  submissionId Int      @unique
+  reservedKiB  BigInt
+  phase        String   @default("compiling")
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("otogWorkerMemoryReservation")
+}
+
+model SubmissionResult {
+  id             Int             @id @default(autoincrement())
+  submissionId   Int             @unique
+  result         String          @db.VarChar(255)
+  errmsg         String?
+  score          Float
+  timeUsed       Int
+  memUsed        Int
+  submission     Submission      @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  subtaskResults SubtaskResult[]
+
+  @@map("submissionResult")
+}
+
+model SubtaskResult {
+  id                 Int              @id @default(autoincrement())
+  submissionResultId Int
+  score              Float
+  fullScore          Float
+  subtaskIndex       Int
+  submissionResult   SubmissionResult @relation(fields: [submissionResultId], references: [id], onDelete: Cascade)
+  verdicts           Verdict[]
+
+  @@unique([submissionResultId, subtaskIndex])
+  @@map("subtaskResult")
+}
+
+model Verdict {
+  id            Int           @id @default(autoincrement())
+  subtaskId     Int
+  status        VerdictStatus
+  percent       Float
+  timeUsed      Int
+  memUsed       Int
+  testcaseIndex Int
+  subtaskResult SubtaskResult @relation(fields: [subtaskId], references: [id], onDelete: Cascade)
+
+  @@unique([subtaskId, testcaseIndex])
+  @@map("verdict")
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  username     String         @unique @db.VarChar(255)
+  showName     String         @unique @db.VarChar(255)
+  email        String?        @unique @db.VarChar(255)
+  password     String         @db.VarChar(255)
+  role         UserRole
+  rating       Int?
+  showInLeaderboard Boolean @default(true)
+  creationDate DateTime       @default(now()) @db.Timestamptz(6)
+  updateDate   DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
+  chat         Chat[]
+  submission   Submission[]
+  userContest  UserContest[]
+  contestScore ContestScore[]
+  avatar       UserAvatar?
+  submissionRequests SubmissionRequest[]
+
+  @@map("user")
+}
+
+model UserAvatar {
+  userId    Int      @id
+  publicId  String   @unique
+  version   Int
+  cloudName String
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("otogUserAvatar")
+}
+
+model UserContest {
+  userId            Int
+  contestId         Int
+  rank              Int?
+  ratingAfterUpdate Int?
+  contest           Contest @relation(fields: [contestId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, contestId])
+  @@map("userContest")
+}
+
+model ContestScore {
+  id                  Int                   @id @default(autoincrement())
+  contestId           Int
+  userId              Int
+  problemId           Int
+  score               Float
+  latestSubmission    DateTime?             @db.Timestamptz(6)
+  contest             Contest               @relation(fields: [contestId], references: [id], onDelete: Cascade)
+  user                User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem             Problem               @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  contestScoreHistory ContestScoreHistory[]
+
+  @@unique([contestId, userId, problemId])
+  @@map("contestScore")
+}
+
+model ContestScoreHistory {
+  contestScoreId Int
+  submissionId   Int
+  score          Float
+  contestScore   ContestScore @relation(fields: [contestScoreId], references: [id], onDelete: Cascade)
+  submission     Submission   @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@id(submissionId)
+  @@map("contestScoreHistory")
+}
+
+model OtogGradingSettings {
+  id                Int      @id @default(1)
+  maxWorkersPerUser Int      @default(1)
+  memoryReservationsEnabled Boolean @default(true)
+  maxCompilerJobs   Int      @default(10)
+  updatedAt         DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("otogGradingSettings")
+}
+
+model OtogGraderAllocation {
+  id              Int      @id @default(1)
+  count           Int
+  revision        Int      @default(1)
+  appliedRevision Int      @default(0)
+  updatedAt       DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("otogGraderAllocation")
+}
+
+model CfContest {
+  contestId Int @id
+  settings Json
+  phase String @default("draft")
+  updatedAt DateTime @default(now()) @db.Timestamptz(6)
+  contest Contest @relation(fields: [contestId], references: [id], onDelete: Cascade)
+  problems CfProblem[]
+  @@map("cfContest")
+}
+
+model CfProblem {
+  id Int @id @default(autoincrement())
+  contestId Int
+  problemId Int
+  letter String
+  points Int
+  bundle String
+  config Json
+  validation String @default("pending")
+  contest CfContest @relation(fields: [contestId], references: [contestId], onDelete: Cascade)
+  problem Problem @relation(fields: [problemId], references: [id], onDelete: Restrict)
+  runs CfRun[]
+  locks CfLock[]
+  @@unique([contestId, problemId])
+  @@unique([contestId, letter])
+  @@map("cfProblem")
+}
+
+model CfRun {
+  submissionId Int @id
+  cfProblemId Int
+  kind String
+  phase String
+  plan Json
+  outcome Json?
+  preOutcome Json?
+  verified Boolean @default(false)
+  requestId String @unique
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  problem CfProblem @relation(fields: [cfProblemId], references: [id], onDelete: Restrict)
+  hack CfHack? @relation("HackJob")
+  targetedHacks CfHack[] @relation("HackTarget")
+  @@index([cfProblemId, kind, phase])
+  @@map("cfRun")
+}
+
+model CfHack {
+  submissionId Int @id
+  targetId Int
+  input String
+  state String @default("pending")
+  answer String?
+  inputDigest String
+  job CfRun @relation("HackJob", fields: [submissionId], references: [submissionId], onDelete: Cascade)
+  target CfRun @relation("HackTarget", fields: [targetId], references: [submissionId], onDelete: Restrict)
+  @@index([targetId, state])
+  @@map("cfHack")
+}
+
+model CfLock {
+  cfProblemId Int
+  userId Int
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  problem CfProblem @relation(fields: [cfProblemId], references: [id], onDelete: Cascade)
+  @@id([cfProblemId, userId])
+  @@map("cfLock")
+}
+
+enum ContestGradingMode {
+  acm
+  classic
+  bestSubmission
+  bestSubtask
+
+  @@map("enum_contest_gradingMode")
+}
+
+enum ContestMode {
+  rated
+  unrated
+
+  @@map("enum_contest_mode")
+}
+
+enum ScoreboardPolicy {
+  DURING_CONTEST
+  AFTER_CONTEST
+  NOT_VISIBLE
+
+  @@map("enum_scoreboard_policy")
+}
+
+enum SubmissionStatus {
+  waiting
+  grading
+  accept
+  reject
+  compileError
+  judgeError
+
+  @@map("enum_submission_status")
+}
+
+enum UserRole {
+  user
+  admin
+
+  @@map("enum_user_role")
+}
+
+enum VerdictStatus {
+  ACCEPTED
+  PARTIAL
+  REJECTED
+  TIME_LIMIT_EXCEEDED
+  MEMORY_LIMIT_EXCEEDED
+  RUNTIME_ERROR
+  SKIPPED
+  PROBLEM_ERROR
+  INTERNAL_ERROR
+
+  @@map("enum_verdict_status")
+}

@@ -1,0 +1,27 @@
+[Unit]
+Description=OTOG read-only VM resource monitor
+After=docker.service network.target
+
+[Service]
+Type=simple
+User=otog
+Group=otog
+SupplementaryGroups=docker
+ExecStart=/usr/bin/python3 /opt/otog-monitor/monitor_agent.py
+Restart=on-failure
+RestartSec=5
+Nice=10
+CPUQuota=10%
+MemoryMax=64M
+TasksMax=32
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET
+
+[Install]
+WantedBy=multi-user.target

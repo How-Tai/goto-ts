@@ -1,0 +1,11 @@
+# CPU-allocation controller recovery — 31 October 2026
+
+The controller failed before executing its program: systemd could not construct its restricted mount namespace because `/run/systemd/system.control`, a required `ReadWritePaths` entry, did not exist. The directory is volatile and disappeared across reboot. Existing CPU affinities remained installed, but new count requests could not converge while the controller repeatedly exited with 226/NAMESPACE.
+
+Installed `/etc/tmpfiles.d/otog-grader-allocation.conf` to create that directory as root:root, mode 0755, at boot. Added `/etc/systemd/system/otog-grader-allocation.service.d/10-runtime-directories.conf` to explicitly order the allocator after `systemd-tmpfiles-setup.service`. Created the directory immediately using the same tmpfiles rule, reloaded systemd, and restarted only `otog-grader-allocation.service`. Existing service security restrictions are retained.
+
+Canonical copies are `tools/grader-allocation/tmpfiles.conf` and `tools/grader-allocation/runtime-directories.conf`. Install these at the paths above when provisioning the allocator on another VM; tmpfiles must run before starting the service. No allocator algorithm, application code, schema, credentials, or problem data changed.
+
+The user had selected six graders before repair. Recovery preserved that selection and settled revision 62: workers 1–6 use CPUs 0–5, and ordinary services plus the unselected worker 7 use CPUs 6–7. The controller accepted a same-configuration wake request and reported no errors. Selected count is operational state and may change later through the dashboard.
+
+All nine inspected grader/database/storage containers retained their IDs, PIDs, and restart counts through recovery; API/web PIDs were also preserved. The controller retained the same PID with zero restarts across its subsequent 30-second reconciliation audit; status remained fresh and error-free. Public HTTPS login and API ping returned 200. No submission was created or rejudged. Evidence and recovery helpers: `tmp/cpu-allocation-recovery-20261031`, and `/opt/otog/cpu-allocation-recovery-20261031` on the VM. The fix is boot-persistent; the VM was not rebooted for verification.

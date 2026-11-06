@@ -1,0 +1,11 @@
+{
+  "name": "@otog/workspace",
+  "version": "0.0.0",
+  "type": "commonjs",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "dependencies": {
+    "glob": "^10.5.0",
+    "yaml": "^2.9.1"
+  }
+}

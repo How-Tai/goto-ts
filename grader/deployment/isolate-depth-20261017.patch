@@ -1,0 +1,118 @@
+--- a/util.c
++++ b/util.c
+@@ -129,13 +129,69 @@
+ static void
+ walktree_ctx(struct walk_context *ctx)
+ {
++  /* Keep the traversal stack on the heap, not in the C call stack or in
++   * one open directory descriptor per level.  Directory cookies preserve
++   * the parent's position when its stream is reopened.  On Linux the
++   * tmpfs/ext4 cookies survive reopening and post-order entry removal.
++   *
++   * Reopen parents relative to the current directory, never by constructing
++   * a potentially PATH_MAX-sized path.  Verify inode and device identities
++   * on every transition: a concurrent rename must fail closed instead of
++   * redirecting privileged traversal outside the original ancestry.
++   */
++  struct walk_frame {
++    struct walk_frame *previous;
++    long position;
++    struct stat parent_st;
++    struct stat child_st;
++    char *child_name;
++  };
++  struct walk_frame *stack = NULL;
+   DIR *dir = fdopendir(ctx->dir_fd);
+   if (!dir)
+     die("fdopendir failed: %m");
+ 
+-  struct dirent *de;
+-  while (de = readdir(dir))
+-    {
++  for (;;)
++    {
++      ctx->dir_fd = dirfd(dir);
++      errno = 0;
++      struct dirent *de = readdir(dir);
++      if (!de)
++	{
++	  if (errno)
++	    die("Cannot read directory: %m");
++	  if (!stack)
++	    {
++	      closedir(dir);
++	      return;
++	    }
++	  int parent_fd = openat(ctx->dir_fd, "..", O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
++	  if (parent_fd < 0)
++	    die("Cannot reopen parent directory: %m");
++	  struct stat st;
++	  if (fstat(parent_fd, &st) < 0)
++	    die("Cannot stat parent directory: %m");
++	  if (st.st_dev != stack->parent_st.st_dev || st.st_ino != stack->parent_st.st_ino)
++	    die("Directory ancestry changed during traversal");
++	  closedir(dir);
++	  dir = fdopendir(parent_fd);
++	  if (!dir)
++	    die("fdopendir of parent failed: %m");
++	  seekdir(dir, stack->position);
++	  ctx->dir_fd = parent_fd;
++	  ctx->name = stack->child_name;
++	  if (fstatat(parent_fd, ctx->name, &ctx->st, AT_SYMLINK_NOFOLLOW) < 0)
++	    die("Cannot stat completed directory %s: %m", ctx->name);
++	  if (!S_ISDIR(ctx->st.st_mode) || ctx->st.st_dev != stack->child_st.st_dev || ctx->st.st_ino != stack->child_st.st_ino)
++	    die("Directory identity changed during traversal");
++	  ctx->is_dir = true;
++	  ctx->callback(ctx);
++	  struct walk_frame *finished = stack;
++	  stack = stack->previous;
++	  free(finished->child_name);
++	  free(finished);
++	  continue;
++	}
+       ctx->name = de->d_name;
+ 
+       if (!strcmp(ctx->name, ".") || !strcmp(ctx->name, ".."))
+@@ -149,13 +205,28 @@
+ 
+       if (S_ISDIR(ctx->st.st_mode))
+ 	{
+-	  struct walk_context subdir = *ctx;
+-	  subdir.dir_fd = openat(ctx->dir_fd, ctx->name, O_RDONLY | O_DIRECTORY | O_NOFOLLOW);
+-	  if (subdir.dir_fd < 0)
++	  int subdir_fd = openat(ctx->dir_fd, ctx->name, O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
++	  if (subdir_fd < 0)
+ 	    die("Cannot open directory %s: %m", ctx->name);
+-	  walktree_ctx(&subdir);
+-	  ctx->is_dir = true;
+-	  ctx->callback(ctx);
++	  struct stat opened;
++	  if (fstat(subdir_fd, &opened) < 0)
++	    die("Cannot stat opened directory %s: %m", ctx->name);
++	  if (opened.st_dev != ctx->st.st_dev || opened.st_ino != ctx->st.st_ino)
++	    die("Directory changed while opening %s", ctx->name);
++	  struct walk_frame *frame = xmalloc(sizeof(*frame));
++	  frame->previous = stack;
++	  frame->position = telldir(dir);
++	  if (frame->position < 0)
++	    die("Cannot record directory position: %m");
++	  if (fstat(ctx->dir_fd, &frame->parent_st) < 0)
++	    die("Cannot stat traversed directory: %m");
++	  frame->child_st = opened;
++	  frame->child_name = xstrdup(de->d_name);
++	  stack = frame;
++	  closedir(dir);
++	  dir = fdopendir(subdir_fd);
++	  if (!dir)
++	    die("fdopendir of child failed: %m");
+ 	}
+       else
+ 	{
+@@ -164,7 +235,6 @@
+ 	}
+     }
+ 
+-  closedir(dir);
+ }
+ 
+ static void

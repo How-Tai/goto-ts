@@ -1,0 +1,45 @@
+# CF problem catalog, library tasks and validator feedback — 2 November 2026
+
+**Deployed and verified on 3 November 2026.** The VM connection recovered after initial local verification. Live build: `sq1E3koidj3Qf2NFrq-UD`, at `/opt/otog/cf-catalog-20261102/workspace`. Public HTTPS, API and grader health checks passed. The five-grader allocation (CPUs 0–4, revision 66) and existing grading settings were preserved.
+
+Existing OTOG problems **1 and 4** were copied into independent private CF problems **75 and 76**. Their existing CF contest links and historical CF submission references now use those copies. All **73 original OTOG problems, 33 users, 649 submissions and 649 results** were preserved. No production test accounts/submissions, rejudge or contest schedule changes were made.
+
+## Use
+
+1. Open `/admin/codeforces/problems`. Create a CF problem or enter an OTOG problem ID under **Import from OTOG**. Import creates a different ID and private copy; edits stay independent. CF and OTOG share accounts and judge infrastructure, but their problem lists, normal submission lists and OTOG solve/profile totals are separated.
+2. Edit the CF problem and upload a PDF and testcase ZIP containing numbered `1.in`/`1.sol` pairs. Time limits in this editor are milliseconds. Upload contestant starter files separately as a ZIP up to 16 MiB; these are downloadable through CF's authorized API, without exposing testcase ZIPs or storage endpoints.
+3. Add the CF ID to a draft contest at `/admin/codeforces/:id`, set its letter/points, and choose pretests/full tests. Comma lists and ranges such as `1-13` work; pretests must be a subset of full tests.
+4. For a library task choose **C++ library task**, and enter source filenames such as `grader.cpp`. Put these files and headers such as `task.h` in the testcase ZIP. Both submitted/reference implementations supply the required functions and omit `main`; the grader supplies `main`. The reference, contestant solution and hacked target use identical GNU C++17 linking in the existing compiler sandbox. Other languages, arbitrary imported shell commands and interactive CF protocols are not supported by this library path.
+5. Supply the input validator and reference, optionally a custom checker, then freeze/validate. Testlib validators must parse the input and call `inf.readEof()`. Rejected input displays **Validation failed on test N**, with stderr in the admin job diagnostic. Old rejected validator jobs also get the corrected label, but previously discarded diagnostics require validation again. Validator crashes/limit failures remain author/judge errors; checker rejection and contestant WA remain distinct.
+6. After system testing finishes, release the problem to `/codeforces/problemset`. Public practice uses a validated finalized bundle plus successful hacks, has separate practice history, and does not change contest standings or hack eligibility. Releasing private problems used by unfinished contests is blocked.
+7. **Copy to OTOG** creates another private problem. A validated CF export includes full tests plus successful hack inputs/answers, numbered consecutively for OTOG. It carries the frozen limits, checker and safe library-link command as well as independent statements, helper files, examples and attachment objects. Review and publish it through the OTOG admin UI.
+
+## Existing data and rollout
+
+Applied `packages/database/prisma/migrations/20261102010000_cf_problem_catalog/migration.sql` with a freshly generated Prisma client. A private database backup was saved before schema changes. The migration introduces the problem `area` namespace and the practice run kind; it does not silently move or hide existing OTOG problems.
+
+The one-time **Separate existing CF problem links** action calls the admin-only `POST /codeforces/admin/problems/migrate`. It copies legacy linked problems before moving only CF relationships and CF submission problem references. Original OTOG rows/files, submission IDs, outcome records, locks, successful hacks and immutable bundle paths are preserved. It takes the existing contest advisory locks and refuses changes while affected jobs are queued/running. Completed problems stay migrated if a later one is busy; retrying migrates only remaining links. The integration suite checks busy refusal and absence of orphan problem rows.
+
+API/web were built on Linux from the updated lockfile. The VM's DNS lookup for two new tarballs failed, so checksum-verified tarballs were transferred into its package cache; the locked install then completed. All seven hardened workers were drained/recreated individually with only the CF module mount changed. Images, native Isolate 2.7 artifact, containment, CPU/memory/PID limits and grading settings matched their previous values. Workers 1–5 remained enabled; 6–7 remained disabled. Custom checkers still compile per job; no cross-submission checker cache was added.
+
+The maintenance CLI initially ran outside the API's protected data mounts. It was rerun in the API's existing mount namespace, working directory, user and supplementary data group, with umask 0007. No storage permissions or sandbox restrictions were relaxed. Original rows/files were preserved during failed attempts; the successful retry migrated both links. API uploads and imports already run in that service context.
+
+The old leaderboard release remains available for application rollback. The previous CF module remains on disk for worker rollback. `tools/codeforces/migrate-catalog.cjs` is a dry-run CLI unless `CF_CATALOG_MIGRATE=1` is set; invoke it in the service's data context. The packaged `grader/src/cf_grading.py` matches `tools/grading/cf_grading.py`.
+
+## Dependencies
+
+Updated legacy minimatch to **3.1.5** and the language-client 5.x dependency path to **11.0.4**. The pinned patch for `vscode-languageclient@9.0.1` removes three obsolete `makeRe()` checks; minimatch 11 constructs its matcher without that API. Tests exercise the actual installed diagnostic, notebook and file-operation filters. Frontend ESLint is pinned to its existing compatible 8.57.1 line; the Next workspace tracing root is explicit.
+
+The final npm audit reports **one moderate version match, zero high/critical**. Remaining minimatch 3.1.5 is below the advisory's broad `<11.0.1` range for [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249), but its installed source lacks the described `firstPhasePreProcess` implementation and `optimizationLevel` option. Legacy callable/Glob 7 consumers cannot be blindly replaced with minimatch 11. This is a qualified remaining audit finding, not a clean audit, suppressed alert or proof of general safety. No new OS/native/Python vulnerability audit is claimed.
+
+## Verification and limits
+
+- API type check and production build passed with the locked dependencies.
+- All repository migration SQL applied to a disposable local PostgreSQL 18 database. Historical online-index migrations were run as separate statements, and the test fixture retired dedicated compiler metadata before the existing seven-grader migration.
+- Real Nest HTTP + Prisma + PostgreSQL + filesystem integration passed: namespace isolation, both copy directions, immutable library files, invalid authoring/uploads, public/private release gates, C++ admission, practice ownership/idempotency, full tests/hack export, and legacy history migration. Starter upload/download/copy used the real S3 client against a bounded local protocol fixture; live MinIO integration remains to be checked.
+- Fifteen real React render states, actual editor filter compatibility checks on Windows and Linux, and the five existing security regression groups passed. No browser visual inspection was available.
+- All **30 fixture jobs / 12 E2E groups** passed in a separate hardened Linux grader container and disposable database on the VM. These included real library reference/submission/hack compilation, testlib validator diagnostics, ordinary batch compatibility, system tests, rejudges and bounded fixture-worker recovery. No live grader was used for hostile-submission testing.
+- Complete Linux standalone production build passed. The final frontend-only admin gate refresh preserved the exact tested backend binary hash. Nine standalone HTTP/NextAuth checks passed, including guest/user rejection and administrator access to the new problem editor, with static assets verified. Public HTTPS returned the expected new build and successful CF/API responses.
+- Earlier Windows-only build limitations were isolated to cross-drive file tracing and unavailable symlink privileges. A server-mode smoke build was used there; those test adapters were not shipped or used for Linux production.
+- Fixture containers/services/database and private fixture credentials were removed. Only the unused candidate webpack cache was deleted after rollout, recovering 0.30 GiB. The VM had **23.37 GiB free** at final verification.
+- Receipts and logs: `tmp/cf-library-20261102/` and `/opt/otog/cf-catalog-20261102/evidence/`. Source changes accompany this deployment record in How-Tai/goto.

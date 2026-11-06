@@ -1,0 +1,19 @@
+name: Grader containment
+on:
+  push:
+    paths: ['grader/**', 'tools/grading/**', '.github/workflows/grader-containment.yml']
+  pull_request:
+    paths: ['grader/**', 'tools/grading/**', '.github/workflows/grader-containment.yml']
+permissions:
+  contents: read
+jobs:
+  hardened-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y apparmor-utils python3-yaml
+      - run: python3 grader/deployment/verify-deployment.py
+      - run: sudo install -m0644 grader/deployment/otog-grader.apparmor /etc/apparmor.d/otog-grader && sudo apparmor_parser -r /etc/apparmor.d/otog-grader
+      - run: docker build -f grader/Dockerfile.glibc -t otog-grader:hardened grader
+      - run: python3 grader/deployment/test-image.py

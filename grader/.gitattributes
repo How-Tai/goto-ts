@@ -1,0 +1,6 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+deployment/isolate-depth-20261017.patch text eol=lf
+
+deployment/isolate-2.7-hardened.patch text eol=lf
+worker-entrypoint.sh text eol=lf
